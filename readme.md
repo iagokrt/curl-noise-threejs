@@ -17,7 +17,6 @@ Shader is a term often used to reference glsl shader code, which is actually **O
 
 using **three.js** we can easily create shader code to web browsers!
 
-// demo.GIF
 ![Project - Preview](./public/demo.gif)
 # Running things locally:
 
