@@ -172,6 +172,7 @@ export default class Particled {
 
     this.time += 0.05;
 
+    this.positionVariable.material.uniforms['time'].value = this.time;
     this.gpuCompute.compute();
 
     this.material.uniforms.positionTexture.value = this.gpuCompute.
