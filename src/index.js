@@ -13,17 +13,9 @@ import gsap from 'gsap';
 
 import './styles/global.scss';
 
-// import t from '../public/a-end.jpg'; // end frame of video : the texture that will be used itself with the fragment uniforms
-import t1 from '../public/a-start.jpg';
-import t from '../public/kelly-sikkema-mask.jpg'
-// import t from '../public/b-end.jpg';
-// import t1 from '../public/b-start.jpg';
-
 import vertex from './shader/ParticlesVertex.glsl';
 import fragment from './shader/fragment.glsl';
 import fragmentSimulation from './shader/fragmentSimulation.glsl';
-
-import {addObjectClickListener} from './component/addObjectClickListener'
 
 const WIDTH = 32;
 
