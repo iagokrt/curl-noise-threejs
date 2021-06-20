@@ -1,0 +1,33 @@
+{
+    "name": "three-js-cxlass",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "webpack serve",
+        "build": "cross-env NODE_ENV=production webpack"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.13.10",
+        "@babel/core": "^7.13.10",
+        "@babel/preset-env": "^7.13.10",
+        "babel-loader": "^8.2.2",
+        "cross-env": "^7.0.3",
+        "css-loader": "^5.1.2",
+        "glslify-loader": "^2.0.0",
+        "html-webpack-plugin": "^5.3.1",
+        "node-sass": "^5.0.0",
+        "raw-loader": "^4.0.2",
+        "sass-loader": "^11.0.1",
+        "style-loader": "^2.0.0",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.25.0",
+        "webpack-cli": "^4.5.0",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "dependencies": {
+        "dat.gui": "^0.7.7",
+        "gsap": "^3.6.0",
+        "three": "^0.126.1"
+    }
+}

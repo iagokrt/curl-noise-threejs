@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+.video {
+  box-sizing: border-box;
+}
+
+body {
+  cursor: url('../../public/ellipse.png'), pointer;
+
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  color: #f1f1f1;
+  overscroll-behavior: none;
+}
+
+#webgl {
+  width: 100vw;
+  height: 100vh;
+}
+
+
+canvas {
+  display: block;
+}
+
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  pointer-events: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 40vh;
+  height: 68.5vh;
+}
+.video video {
+  width: 100%;
+  // opacity: 0;
+}
+
+.video2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  border: 3px solid #fff;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 40vh;
+  height: 68.5vh;
+}
+.video2 video {
+  width: 100%;
+}
