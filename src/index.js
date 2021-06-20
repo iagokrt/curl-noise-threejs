@@ -130,8 +130,9 @@ export default class Particled {
     });
 
     this.geometry = new THREE.BufferGeometry();
+    
     let positions = new Float32Array(WIDTH*WIDTH*3);
-    let references = new Float32Array(WIDTH*WIDTH*3);
+    let reference = new Float32Array(WIDTH*WIDTH*2);
 
     for(let i = 0; i < WIDTH*WIDTH; i++) {
       console.log(i);
@@ -144,11 +145,11 @@ export default class Particled {
       // let zz = (i%WIDTH)/WIDTH;
 
       positions.set([x,y,z], i*3);
-      references.set([xx,yy], i*2);
+      reference.set([xx,yy], i*2);
     }
 
     this.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    this.geometry.setAttribute('reference', new THREE.BufferAttribute(references, 2))
+    this.geometry.setAttribute('reference', new THREE.BufferAttribute(reference, 2))
 
     this.plane = new THREE.Points(this.geometry, this.material);
 
@@ -171,6 +172,11 @@ export default class Particled {
 
     this.time += 0.05;
 
+    this.gpuCompute.compute();
+
+    this.material.uniforms.positionTexture.value = this.gpuCompute.
+    getCurrentRenderTarget(this.positionVariable).texture;
+    
     this.material.uniforms.time.value = this.time;
 
     requestAnimationFrame(this.render.bind(this));
