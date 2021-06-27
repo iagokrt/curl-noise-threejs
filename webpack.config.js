@@ -43,6 +43,10 @@ module.exports = {
                 exclude: /node_modules/,
                 use: ['raw-loader', 'glslify-loader'],
             },
+            {
+                test: /\.(glb|gltf)$/,
+                use: [{ loader: 'file-loader', options: { outputPath: '3d/models/' }}]
+            },
         ],
     },
 }

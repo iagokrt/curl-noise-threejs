@@ -122,14 +122,15 @@ vec3 curl(float	x,	float	y,	float	z)
 
 
 void main() {
-
+    
     vec2 uv = gl_FragCoord.xy / resolution.xy;
+
     vec4 tmpPos = texture2D( texturePosition, uv );
     vec3 pos = tmpPos.xyz;
+
     float f = 1.;
     float amplitude = 0.001;
-
     vec3 target = pos + amplitude*curl(f*pos.x, f*pos.y, f*pos.z);
-    
+
     gl_FragColor = vec4( target , 1. );
 }
