@@ -10,14 +10,12 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
 
 import * as dat from 'dat.gui';
-import gsap from 'gsap';
+// import gsap from 'gsap';
 
 import './styles/global.scss';
 
 import vertex from './shader/v_shader.glsl';
-// import fragment from './shader/f_shader.glsl';
-// import vertex from './shader/vertexParticles.glsl';
-import fragment from './shader/fragment.glsl';
+import fragment from './shader/f_shader.glsl';
 import fragmentSimulation from './shader/fragmentSimulation.glsl';
 
 // import tulip from '../public/tulip.glb'
@@ -35,7 +33,7 @@ export default class Particled {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0xf1f1f1, 1);
+    this.renderer.setClearColor(0x000000, 1);
     this.renderer.physicallyCorrectLights = true;
 
     this.container.appendChild(this.renderer.domElement);
@@ -45,10 +43,10 @@ export default class Particled {
       1,
       window.innerWidth / window.innerHeight,
       0.001,
-      2500
+      1000
     );
 
-    this.camera.position.set(0, 0, -95);
+    this.camera.position.set(0, 0, -75);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
@@ -138,6 +136,7 @@ export default class Particled {
         positionTexture: {  value: null },
         resolution: { type: 'v4', value: new THREE.Vector4() },
       },
+      blending: THREE.AdditiveBlending,
       vertexShader: vertex,
       fragmentShader: fragment,
     });
@@ -168,7 +167,7 @@ export default class Particled {
 
     // instantiate the object
     // this.geometry = this.model.geometry; // alternatively loading the model
-    this.geometry = new THREE.IcosahedronBufferGeometry(1., 16);
+    this.geometry = new THREE.IcosahedronBufferGeometry(0.58, 79);
     this.mesh = new THREE.Points(this.geometry, this.material);
 
     this.scene.add(this.mesh);

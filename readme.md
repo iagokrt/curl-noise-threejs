@@ -10,7 +10,7 @@ After getting some fun ~~and~~ ~~trouble~~ with threejs is time to move to shade
 
 Shader is a term often used to reference glsl shader code, which is actually **OpenGL Shading Language**
 
-- [https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL))
+- [https://www.khronos.org/opengl/wiki/Core*Language*(GLSL)](<https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)>)
 - [https://thebookofshaders.com/](https://thebookofshaders.com/)
 
 ## Example using curl noise functions inside shaders
@@ -18,18 +18,19 @@ Shader is a term often used to reference glsl shader code, which is actually **O
 using **three.js** we can easily create shader code to web browsers!
 
 ![Project - Preview](./public/demo.gif)
+
 # Running things locally:
 
 execute **yarn** or **npm**.
 
-*Depending on what development package manager you're using.* 
+_Depending on what development package manager you're using._
 
-*You can use either yarn or npm.* 
+_You can use either yarn or npm._
 
 - Installing dependencies
 
 ```powershell
-yarn 
+yarn
 
 npm install
 ```
@@ -44,7 +45,7 @@ npm run dev
 
 🚧 WORK IN PROGRESS 🚧
 
-✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 1O%  Setup - Initial Configuration and Template
+✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 1O% Setup - Initial Configuration and Template
 
 ✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 2O% Setup - Adding Threejs to project
 
@@ -54,12 +55,14 @@ npm run dev
 
 ✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 5O% Shaders - Bringing Curl Noise Function to project.
 
-❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 6O% Load OBJ with three.js loaders
+✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 6O% Load OBJ with three.js loaders
 
-❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 7O% Link data from loaded obj with the shaders
+✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 7O% Link data from loaded obj with the shaders
 
-❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 8O% refactor
+✔️ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 8O% refactor
 
-❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 9O% work on presentation of the project
+❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 85% use model within gpgpu
+
+❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 9O% work on presentation of the project
 
 ❌ [̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅_̲̅] 100% publish
