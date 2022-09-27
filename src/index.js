@@ -4,14 +4,19 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 // post-processing
-// import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-// import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-// import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+// gpu rendering
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
+
+// settings and animations 
 import * as dat from 'dat.gui';
 import gsap from 'gsap';
 
 import './styles/global.scss';
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
 
 import vertex from './shader/v_shader.glsl';
 import fragment from './shader/f_shader.glsl';
@@ -19,8 +24,7 @@ import fragmentSimulation from './shader/fragmentSimulation.glsl';
 
 // import tulip from '../public/tulip.glb'
 
-const WIDTH = 128;
-
+const WIDTH = 64;
 export default class Particled {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -71,11 +75,37 @@ export default class Particled {
     this.resize();
     this.render();
     this.setupResize();
-    // this.settings();
+    this.settings();
     this.setupMenu();
     this.setupAnimations();
+    // this.post();
+    this.cameraMovement();
   }
   
+  // post processing effects
+  post() {
+    this.rr = new RenderPass(this.scene, this.camera);
+
+    /* configure post-processing */
+
+    // bloom
+    this.bloom = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      1.5,
+      0.4,
+      0.85
+    );
+
+    this.bloom.threshold = this.settings.bloomThreshold;
+    this.bloom.strength = this.settings.bloomStrength;
+    this.bloom.radius = this.settings.bloomRadius;
+
+    // render composer 
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(this.rr);
+    this.composer.addPass(this.bloom);
+  }
+
   // framebuffer output technique
   initGPGPU() {
     this.gpuCompute = new GPUComputationRenderer( WIDTH, WIDTH, this.renderer);
@@ -119,6 +149,20 @@ export default class Particled {
 
     this.gui = new dat.GUI();
   
+    this.settings = {
+      distortion: 0.0,
+      bloomStrength: .01,
+      camera: 0,
+      fragColor_vUvChannels: 0.4
+    };
+
+    this.shaderFolder = this.gui.addFolder('shaders')
+    // this.shaderFolder.add(this.settings);
+    // shadersSettings.add(cube.rotation, 'y', 0, Math.PI * 2)
+    
+    this.gui.add(this.settings, 'distortion', 0, 3, 0.01);
+    this.gui.add(this.settings, 'bloomStrength', 0, 5, 0.01);
+    this.gui.add(this.settings, 'camera', -100, 100, 1);
   }
 
   setupResize() {
@@ -132,6 +176,7 @@ export default class Particled {
     this.camera.aspect = this.width / this.height;
 
     this.camera.updateProjectionMatrix();
+    // this.composer.setSize(this.width, this.height);
   }
 
   addMesh() {
@@ -203,6 +248,8 @@ export default class Particled {
     this.positionVariable.material.uniforms['time'].value = this.time;
     this.gpuCompute.compute();
 
+    // this.bloom.strength = this.settings.bloomStrength;
+
     this.material.uniforms.positionTexture.value = this.gpuCompute.
     getCurrentRenderTarget(this.positionVariable).texture;
     
@@ -210,6 +257,7 @@ export default class Particled {
 
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera); // using the composer without bloom post
+    // this.composer.render();
   }
 
   setupMenu() {
@@ -249,7 +297,7 @@ export default class Particled {
       // animate cam
       // console.log('initial pos', this.camera.position);
       gsap.to(this.camera.position, {
-        z: -43,
+        z: -55.7,
         duration: 3.3,
       })
       
@@ -263,6 +311,16 @@ export default class Particled {
     // change the colour of the mesh
     // change the values for the shader, or time for the shader animation
   }
+
+  // setup camera settings
+  cameraMovement() {
+    var camTR = document.getElementById('button2')
+    camTR.addEventListener('click', () => {
+      console.log(this.camera.position.z)
+      this.camera.position.z = this.settings.camera
+    })
+  }
+
 }
 
 new Particled({
