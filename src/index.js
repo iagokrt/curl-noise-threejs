@@ -8,7 +8,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
-
 import * as dat from 'dat.gui';
 // import gsap from 'gsap';
 
@@ -27,13 +26,14 @@ export default class Particled {
     this.scene = new THREE.Scene();
 
     this.container = options.dom; // document.getElementById('webgl')
+    this.menu = options.menu; // document.getelementbyid('menu')
     this.width = this.container.offsetWidth;
     this.height = this.container.offsetHeight;
 
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0x000000, 1);
+    this.renderer.setClearColor(0x0e1111, 1);
     this.renderer.physicallyCorrectLights = true;
 
     this.container.appendChild(this.renderer.domElement);
@@ -46,7 +46,7 @@ export default class Particled {
       1000
     );
 
-    this.camera.position.set(0, 0, -75);
+    this.camera.position.set(0, 0, -105);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
@@ -62,6 +62,7 @@ export default class Particled {
     this.render();
     this.setupResize();
     // this.settings();
+    this.setupMenu();
 
   }
   
@@ -200,8 +201,26 @@ export default class Particled {
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera); // using the composer without bloom post
   }
+
+  setupMenu() {
+    var openState = false;
+    var base = document.getElementById('base');
+
+    this.menu.addEventListener('click', () => {
+      base.classList.toggle('open');
+    })
+
+    this.container.addEventListener('click', () => {
+      if (base.classList.contains('open')) {
+        base.classList.toggle('open')
+      } else {
+      }
+    })
+
+  }
 }
 
 new Particled({
   dom: document.getElementById('webgl'),
+  menu: document.getElementById('menu')
 });
