@@ -9,7 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
 import * as dat from 'dat.gui';
-// import gsap from 'gsap';
+import gsap from 'gsap';
 
 import './styles/global.scss';
 
@@ -38,6 +38,15 @@ export default class Particled {
 
     this.container.appendChild(this.renderer.domElement);
     // this.loader = new GLTFLoader();
+    
+    // load 'manager'
+    this.loading = true;
+
+    window.onload = () => { 
+      document.getElementById("loading").style.display = "none" 
+      document.querySelector("header").style.display = "block" 
+      this.loading = false;
+    }
 
     this.camera = new THREE.PerspectiveCamera(
       1,
@@ -63,7 +72,7 @@ export default class Particled {
     this.setupResize();
     // this.settings();
     this.setupMenu();
-
+    this.setupAnimations();
   }
   
   // framebuffer output technique
@@ -188,7 +197,7 @@ export default class Particled {
   render() {
     if (!this.isPlaying) return;
 
-    this.time += 0.05;
+    this.time += 0.06;
 
     this.positionVariable.material.uniforms['time'].value = this.time;
     this.gpuCompute.compute();
@@ -213,11 +222,57 @@ export default class Particled {
     this.container.addEventListener('click', () => {
       if (base.classList.contains('open')) {
         base.classList.toggle('open')
-      } else {
-      }
+      } 
     })
-
   }
+
+  // use gsap to animate stuff
+  setupAnimations() {
+    // this.gsap = gsap; // console.log(gsap);
+    // mainly idea is based on the change of scene once user interactives with it
+    var base = document.getElementById('base');
+   
+    var trigger = document.getElementById('nv1'); // first user interactive cinematics
+
+    trigger.addEventListener('click', () => {
+      // before start it closes the recent menu
+      base.classList.contains('open') ? base.classList.remove('open') : ''
+      
+      var timeline = gsap.timeline({})
+      // animate parallax cortina
+      gsap.to('.cortina', {
+        height: '100%', 
+        width: '100%',
+        duration: 2.5,
+        ease: 'Power2.easeInOut'
+      })
+      // animate cam
+      // console.log('initial pos', this.camera.position);
+      gsap.to(this.camera.position, {
+        z: -43,
+        duration: 3.3,
+      }).then(
+        gsap.to('#anime-container', {
+          opacity: 1, display: 'block', delay: 2.3, duration: 3.3, ease: 'Power4.easeInOut'
+        })
+      )
+      
+    })
+    // add a few paragraph to the scene
+
+    
+
+    // ideas:
+    // change the colour of the mesh
+    // change the values for the shader, or time for the shader animation
+
+    // use custom text animations to!
+  }
+
+  // setupLoader() {
+
+  // }
+
 }
 
 new Particled({
