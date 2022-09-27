@@ -45,6 +45,7 @@ export default class Particled {
     window.onload = () => { 
       document.getElementById("loading").style.display = "none" 
       document.querySelector("header").style.display = "block" 
+      // document.querySelector("anime-container").style.display = "flex" 
       this.loading = false;
     }
 
@@ -237,7 +238,6 @@ export default class Particled {
     trigger.addEventListener('click', () => {
       // before start it closes the recent menu
       base.classList.contains('open') ? base.classList.remove('open') : ''
-      
       var timeline = gsap.timeline({})
       // animate parallax cortina
       gsap.to('.cortina', {
@@ -251,28 +251,18 @@ export default class Particled {
       gsap.to(this.camera.position, {
         z: -43,
         duration: 3.3,
-      }).then(
-        gsap.to('#anime-container', {
-          opacity: 1, display: 'block', delay: 2.3, duration: 3.3, ease: 'Power4.easeInOut'
-        })
-      )
+      })
       
-    })
-    // add a few paragraph to the scene
+      timeline.to('#anime-container', {
+        opacity: 1, display: 'flex', duration: 2, ease: 'Sine.easeIn'
+      })
 
-    
+    })
 
     // ideas:
     // change the colour of the mesh
     // change the values for the shader, or time for the shader animation
-
-    // use custom text animations to!
   }
-
-  // setupLoader() {
-
-  // }
-
 }
 
 new Particled({
