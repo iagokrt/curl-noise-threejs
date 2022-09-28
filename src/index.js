@@ -54,13 +54,13 @@ export default class Particled {
     }
 
     this.camera = new THREE.PerspectiveCamera(
-      1,
+      10,
       window.innerWidth / window.innerHeight,
       0.001,
       1000
     );
 
-    this.camera.position.set(0, 0, -105);
+    this.camera.position.set(0, 0, -425);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
@@ -162,7 +162,7 @@ export default class Particled {
     
     this.gui.add(this.settings, 'distortion', 0, 3, 0.01);
     this.gui.add(this.settings, 'bloomStrength', 0, 5, 0.01);
-    this.gui.add(this.settings, 'camera', -100, 100, 1);
+    this.gui.add(this.settings, 'camera', -200, 100, 1);
   }
 
   setupResize() {
@@ -223,7 +223,7 @@ export default class Particled {
 
     // instantiate the object
     // this.geometry = this.model.geometry; // alternatively loading the model
-    this.geometry = new THREE.IcosahedronBufferGeometry(0.58, 79);
+    this.geometry = new THREE.TorusGeometry(5, 32, 162, 50);
     this.mesh = new THREE.Points(this.geometry, this.material);
 
     this.scene.add(this.mesh);
@@ -289,8 +289,8 @@ export default class Particled {
       var timeline = gsap.timeline({})
       // animate parallax cortina
       gsap.to('.cortina', {
-        height: '100%', 
-        width: '100%',
+        // height: '100%', 
+        width: '0%',
         duration: 2.5,
         ease: 'Power2.easeInOut'
       })

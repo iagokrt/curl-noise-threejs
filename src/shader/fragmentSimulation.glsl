@@ -129,6 +129,7 @@ void main() {
     vec3 pos = tmpPos.xyz;
 
     float f = 1.;
+    /* float amplitude = 0.001; */
     float amplitude = 0.001;
     vec3 target = pos + amplitude*curl(f*pos.x, f*pos.y, f*pos.z);
 
