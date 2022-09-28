@@ -130,7 +130,7 @@ void main() {
 
     float f = 1.;
     /* float amplitude = 0.001; */
-    float amplitude = 0.001;
+    float amplitude = 0.011;
     vec3 target = pos + amplitude*curl(f*pos.x, f*pos.y, f*pos.z);
 
     gl_FragColor = vec4( target , 1. );

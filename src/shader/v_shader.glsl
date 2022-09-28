@@ -130,7 +130,7 @@ void main() {
 
     // vec3 pos = texture(positionTexture, reference).xyz;
     vec3 newpos = position;
-    float f = 2.;
+    float f = 5.;
     float amplitude = 1.;
     float maxDistance = 2.;
     vec3 target = position+curl( newpos.x * f, newpos.y * f, newpos.z * f) * amplitude;
@@ -140,6 +140,6 @@ void main() {
 
     vec4 mvPosition = modelViewMatrix * vec4( newpos, 1. );
 
-    gl_PointSize = .2 * ( 1. / - mvPosition.z );
+    gl_PointSize = .4 * ( 1. / - mvPosition.z );
     gl_Position = projectionMatrix * mvPosition;
 }

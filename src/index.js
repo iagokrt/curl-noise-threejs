@@ -24,7 +24,19 @@ import fragmentSimulation from './shader/fragmentSimulation.glsl';
 
 // import tulip from '../public/tulip.glb'
 
-const WIDTH = 64;
+const WIDTH = 128;
+
+const CANVAS = {
+  bgcolor: 0x0e1111,
+  alpha: 1
+}
+
+const DEFAULT_CAMERA = {
+  fov:10,
+  aspect: window.innerWidth / window.innerHeight,
+  near:0.001,
+  far:2000
+}
 export default class Particled {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -37,7 +49,7 @@ export default class Particled {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0x0e1111, 1);
+    this.renderer.setClearColor(CANVAS.bgcolor, CANVAS.alpha);
     this.renderer.physicallyCorrectLights = true;
 
     this.container.appendChild(this.renderer.domElement);
@@ -54,13 +66,13 @@ export default class Particled {
     }
 
     this.camera = new THREE.PerspectiveCamera(
-      10,
-      window.innerWidth / window.innerHeight,
-      0.001,
-      1000
+      DEFAULT_CAMERA.fov,
+      DEFAULT_CAMERA.aspect,
+      DEFAULT_CAMERA.near,
+      DEFAULT_CAMERA.far
     );
 
-    this.camera.position.set(0, 0, -425);
+    this.camera.position.set(0, 0, -885);
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
@@ -72,6 +84,8 @@ export default class Particled {
     // initialize the GPUComputationRenderer
     this.initGPGPU();
     this.addMesh();
+    this.addPlane();
+
     this.resize();
     this.render();
     this.setupResize();
@@ -80,6 +94,8 @@ export default class Particled {
     this.setupAnimations();
     // this.post();
     this.cameraMovement();
+    this.startA();
+    this.debugA();
   }
   
   // post processing effects
@@ -148,7 +164,9 @@ export default class Particled {
     let that = this;
 
     this.gui = new dat.GUI();
-  
+    
+    this.gui.close();
+
     this.settings = {
       distortion: 0.0,
       bloomStrength: .01,
@@ -211,7 +229,7 @@ export default class Particled {
 
       let xx = (i%WIDTH)/WIDTH;
       let yy = ~~(i/WIDTH)/WIDTH;
-      // let zz = (i%WIDTH)/WIDTH;
+      let zz = (i%WIDTH)/WIDTH;
 
       positions.set([x,y,z], i*3);
       reference.set([xx,yy], i*2);
@@ -229,6 +247,37 @@ export default class Particled {
     this.scene.add(this.mesh);
   }
 
+  addPlane() {
+     // THREE ShaderMaterial is using glsl vertex and fragment
+     this.material2 = new THREE.ShaderMaterial({
+      extensions: {
+        derivatives: '#extension GL_OES_standard_derivatives :enable',
+      },
+      uniforms: {
+        time: { type: 'f', value: 0 },
+        positionTexture: {  value: null },
+        resolution: { type: 'v4', value: new THREE.Vector4() },
+      },
+      blending: THREE.AdditiveBlending,
+      vertexShader: vertex,
+      fragmentShader: fragment,
+    });
+
+    this.geometry2 = new THREE.IcosahedronGeometry(120, 20);
+
+    // this.material2 = new THREE.MeshBasicMaterial();
+
+    // this.geometry = this.model.geometry; // alternatively loading the model
+    this.plane = new THREE.Mesh(this.geometry2, this.material2);
+
+    this.plane.visible = false;
+
+    // this.plane.position.z = 200;
+    // this.plane.position.x = 20;
+
+    this.scene.add(this.plane);
+  }
+
   stop() {
     this.isPlaying = false;
   }
@@ -243,7 +292,7 @@ export default class Particled {
   render() {
     if (!this.isPlaying) return;
 
-    this.time += 0.06;
+    this.time += 0.09;
 
     this.positionVariable.material.uniforms['time'].value = this.time;
     this.gpuCompute.compute();
@@ -286,6 +335,7 @@ export default class Particled {
     trigger.addEventListener('click', () => {
       // before start it closes the recent menu
       base.classList.contains('open') ? base.classList.remove('open') : ''
+      console.log('init', this.time);
       var timeline = gsap.timeline({})
       // animate parallax cortina
       gsap.to('.cortina', {
@@ -294,15 +344,32 @@ export default class Particled {
         duration: 2.5,
         ease: 'Power2.easeInOut'
       })
+      console.log('cortina', this.time);
+
       // animate cam
-      // console.log('initial pos', this.camera.position);
+      // console.log('camera: initial', this.camera.position);
       gsap.to(this.camera.position, {
-        z: -55.7,
-        duration: 3.3,
+        z: -25.7,
+        duration: 3.6,
+      }).then(
+        gsap.to(this.camera.position, {
+          z: -900,
+          duration: 6.4,
+          delay: 4.4,
+          // ease: 'Sine.easeOut'
+        }).then(console.log(' ?then', this.time)) 
+      )
+      gsap.to(this.mesh.rotation, {
+        x: Math.PI,
+        y: Math.PI,
+        z: Math.PI,
+        delay: 2.4,
+        duration: 8,
+        ease: 'Sine.easeIn'
       })
       
       timeline.to('#anime-container', {
-        opacity: 1, display: 'flex', duration: 2, ease: 'Sine.easeIn'
+        opacity: 1, display: 'flex', duration: 2, ease: 'Sine.easeIn', delay: 1
       })
 
     })
@@ -310,16 +377,62 @@ export default class Particled {
     // ideas:
     // change the colour of the mesh
     // change the values for the shader, or time for the shader animation
+    // add post 
+
   }
 
   // setup camera settings
   cameraMovement() {
     var camTR = document.getElementById('button2')
     camTR.addEventListener('click', () => {
-      console.log(this.camera.position.z)
+      console.log('camera prev: ', this.camera.position);
       this.camera.position.z = this.settings.camera
     })
   }
+
+  // setup new animations
+
+  // ideas
+
+  // dispose the current mesh and add another one
+  // add THREE texts
+  // change shader values
+  startA() {
+    var a = document.getElementById('a')
+    a.addEventListener('click', () => {
+      this.mesh.visible = false;
+
+      this.plane.visible = true;
+
+      // camera.position.set(400, 400, 800);
+      // camera.lookAt(0, 600, 0);
+      // camera.rotation.z = Math.PI
+      this.plane.rotateZ = Math.PI / 2.6;
+      this.plane.position.x = 20;
+
+      // this.plane.rotateY = 2
+      console.log('plane',this.plane);
+      console.log(this.camera.position);
+      // console.log();
+      // gsap.to(this.camera.position, {
+      //   x: 67, 
+      //   y: -85, 
+      //   z: 1140,
+      //   duration: 2
+      // })
+    })
+  }
+  debugA() {
+    var b = document.getElementById('b')
+    b.addEventListener('click', () => {
+      console.log(this.camera.position);
+      console.log('plane',this.plane.position);
+      // this.camera.lookAt(this.plane.getWorldPosition);
+      this.camera.lookAt(20,0,0);
+      
+    })
+  }
+
 
 }
 
