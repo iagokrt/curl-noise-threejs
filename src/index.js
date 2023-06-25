@@ -326,39 +326,39 @@ export default class Particled {
 
   // use gsap to animate stuff
   setupAnimations() {
-    // this.gsap = gsap; // console.log(gsap);
-    // mainly idea is based on the change of scene once user interactives with it
-    var base = document.getElementById('base');
-   
-    var trigger = document.getElementById('nv1'); // first user interactive cinematics
-
+    const base = document.getElementById('base');
+    const trigger = document.getElementById('nv1');
+    const animationDuration = 2;
+    const restartDelay = 5;
+  
     trigger.addEventListener('click', () => {
-      // before start it closes the recent menu
-      base.classList.contains('open') ? base.classList.remove('open') : ''
-      console.log('init', this.time);
-      var timeline = gsap.timeline({})
-      // animate parallax cortina
+      base.classList.contains('open') ? base.classList.remove('open') : '';
+      // console.log('init', this.time);
+  
+      const timeline = gsap.timeline({});
+  
+      // Animate parallax cortina
       gsap.to('.cortina', {
-        // height: '100%', 
         width: '0%',
         duration: 2.5,
         ease: 'Power2.easeInOut'
-      })
-      console.log('cortina', this.time);
-
-      // animate cam
-      // console.log('camera: initial', this.camera.position);
+      });
+  
+      console.log('cortina lasts for 2.5 with Power2.easeInOut');
+  
+      // Animate camera position
       gsap.to(this.camera.position, {
-        z: -25.7,
-        duration: 3.6,
-      }).then(
+        z: -25.7, // cam step 1
+        duration: 3.6 // cam step 1 duration
+      }).then(() => {
         gsap.to(this.camera.position, {
-          z: -900,
-          duration: 6.4,
-          delay: 4.4,
-          // ease: 'Sine.easeOut'
-        }).then(console.log(' ?then', this.time)) 
-      )
+          z: -900, // cam step 2
+          duration: 6.4, // cam step 2 duration
+          delay: 4.4 // delay is bigger then duration for step 1
+        }).then(console.log(' is ending the animate camera position'));
+      });
+  
+      // Animate mesh rotation
       gsap.to(this.mesh.rotation, {
         x: Math.PI,
         y: Math.PI,
@@ -366,20 +366,35 @@ export default class Particled {
         delay: 2.4,
         duration: 8,
         ease: 'Sine.easeIn'
-      })
-      
-      timeline.to('#anime-container', {
-        opacity: 1, display: 'flex', duration: 2, ease: 'Sine.easeIn', delay: 1
-      })
-
-    })
-
-    // ideas:
-    // change the colour of the mesh
-    // change the values for the shader, or time for the shader animation
-    // add post 
-
+      });
+  
+      // Animate anime container // using the timeline method
+      timeline.to('#anime-container', { // add html shit ok
+        opacity: 1,
+        display: 'flex',
+        duration: 2,
+        ease: 'Sine.easeIn',
+        delay: 1 
+      });
+  
+      // Animate camera to spin and look at the mesh
+      timeline.to(this.camera.rotation, {
+        y: Math.PI * 2,
+        duration: animationDuration,
+        delay: 1
+      });
+  
+      timeline.to(this.camera.lookAt, {
+        x: this.mesh.position.x,
+        y: this.mesh.position.y,
+        z: this.mesh.position.z,
+        duration: animationDuration,
+        delay: -animationDuration
+      });
+  
+    });
   }
+  
 
   // setup camera settings
   cameraMovement() {
