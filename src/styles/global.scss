@@ -13,16 +13,51 @@ canvas {
    display: block;
 }
 
-$w: #FFFFFF;
+// theme default
+// $primary-dark: #004E64;
+// $primary-light: #007B8A;
+// $primary-darker: #002D36;
+$text-white: #FFFFFF;
+$wierd-white: #eaeaea;
+$highlight-orange: #FFA41B;
+$highlight-red: #E84545;
+$highlight-green: #50C878;
+$highlight-purple: #8B5FBF;
+
+// theme light 
+$primary-light: #00A7BF;
+$primary-lighter: #00C6D1;
+$primary-lightest: #33E1EB;
+$text-light-gray: #E0E0E0;
+$highlight-light-orange: #FFC97E;
+$highlight-light-red: #FFAFAF;
+$highlight-light-green: #8BCA77;
+$highlight-light-purple: #B99FD4;
+
+// dark theme
+$primary-dark: #007382;
+$primary-darker: #005A68;
+$primary-darkest: #003C44;
+$text-dark-gray: #666666;
+$highlight-dark-orange: #FF8000;
+$highlight-dark-red: #B92E34;
+$highlight-dark-green: #3B704B;
+$highlight-dark-purple: #794B8B;
+
+
+//  valores de cor existentes
+$cortina: #f1f1f2;
+$w: $text-white;
 $ww: #f1f1f1;
-$we: #eaeaea;
-$b: #000000;
-$bb: #000123;
-$c: #b8455c;
-$o: #e87840; 
+$we: $wierd-white;
+$b: $primary-dark;
+$bb: $primary-darker;
+$c: $highlight-red;
+$o: $highlight-orange;
 $y: #efcc35;
-$g: #2d7256;
+$g: $highlight-green;
 $p: #624b5f;
+
 $iconmargin: 35px;
 
 // $iconpath_linkedin: 'path'; 
@@ -42,7 +77,7 @@ body {
   width: 100%;
   position: fixed;
   height: 100%;
-  background-color: #f1f1f2;
+  background-color: $cortina;
 //   z-index: -100;
   mix-blend-mode: difference; // blend mode set to difference equals to magic!
 }
@@ -64,7 +99,7 @@ body {
    position: fixed;
    display: block;
    z-index: 99;
-   background-color: #eaeaea;
+   background-color: $we;
    
    h1 {
       text-align: center;
@@ -92,7 +127,7 @@ header {
    //overflow:hidden;
    .menu {
       z-index: 100;
-      background-color: $w;
+      background-color: $primary-light;
       position: absolute;
       top: 0px;
       left: 0px;
@@ -160,7 +195,7 @@ header {
       .icon-menu-2 {
          top: 0px;
          left: 0px;
-         color: #fff;
+         color: $w;
          transition-delay: 0.1s;
       }
       .icon-menu-3 {
@@ -366,13 +401,6 @@ header {
    left: 50%;
    z-index: 90;
    transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1);
-
-   // .p-anim-1 {
-   //    z-index: 90;
-   //    top: 50%;
-   //    left: 33%;
-   //    transition: all 1s cubic-bezier(0.5, -0.75, 0.05, 1);
-   // }
 
    .p-anim-1, .p-anim-2,.p-anim-3,.p-anim-4 {
       background-color: #FFFFFF;
