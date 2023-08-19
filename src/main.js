@@ -16,7 +16,7 @@ import * as dat from 'dat.gui';
 import gsap from 'gsap';
 
 import './styles/global.scss';
-javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
+// javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
 
 import vertex from './shader/v_shader.glsl';
 import fragment from './shader/f_shader.glsl';
@@ -90,10 +90,10 @@ export default class Particled {
     this.render();
     this.setupResize();
     this.settings();
-    this.setupMenu();
+    // this.setupMenu();
     this.setupAnimations();
     // this.post();
-    this.cameraMovement();
+    // this.cameraMovement();
     this.startA();
     this.debugA();
   }
@@ -309,101 +309,103 @@ export default class Particled {
     // this.composer.render();
   }
 
-  setupMenu() {
-    var openState = false;
-    var base = document.getElementById('base');
+  // setupMenu() {
+  //   var openState = false;
+  //   var base = document.getElementById('base');
 
-    this.menu.addEventListener('click', () => {
-      base.classList.toggle('open');
-    })
+  //   this.menu.addEventListener('click', () => {
+  //     base.classList.toggle('open');
+  //   })
 
-    this.container.addEventListener('click', () => {
-      if (base.classList.contains('open')) {
-        base.classList.toggle('open')
-      } 
-    })
-  }
+  //   this.container.addEventListener('click', () => {
+  //     if (base.classList.contains('open')) {
+  //       base.classList.toggle('open')
+  //     } 
+  //   })
+  // }
 
   // use gsap to animate stuff
   setupAnimations() {
-    const base = document.getElementById('base');
-    const trigger = document.getElementById('nv1');
+    // const base = document.getElementById('base');
+    // const trigger = document.getElementById('nv1');
     const animationDuration = 2;
     const restartDelay = 5;
-  
-    trigger.addEventListener('click', () => {
-      base.classList.contains('open') ? base.classList.remove('open') : '';
+
+    setTimeout(() => {
+      // base.classList.contains('open') ? base.classList.remove('open') : '';
       // console.log('init', this.time);
   
       const timeline = gsap.timeline({});
-  
+    
       // Animate parallax cortina
       gsap.to('.cortina', {
         width: '0%',
-        duration: 2.5,
-        ease: 'Power2.easeInOut'
+        duration: 3.7,
+        ease: 'Sine.easeInOut'
       });
   
-      console.log('cortina lasts for 2.5 with Power2.easeInOut');
+      console.log('cortina with Power2.easeInOut');
   
       // Animate camera position
       gsap.to(this.camera.position, {
         z: -25.7, // cam step 1
-        duration: 3.6 // cam step 1 duration
+        duration: 3.8 // cam step 1 duration
       }).then(() => {
         gsap.to(this.camera.position, {
           z: -900, // cam step 2
-          duration: 6.4, // cam step 2 duration
+          duration: 8.4, // cam step 2 duration
           delay: 4.4 // delay is bigger then duration for step 1
-        }).then(console.log(' is ending the animate camera position'));
+        })
       });
   
       // Animate mesh rotation
       gsap.to(this.mesh.rotation, {
         x: Math.PI,
-        y: Math.PI,
+        // y: Math.PI,
         z: Math.PI,
-        delay: 2.4,
+        delay: 3,
         duration: 8,
         ease: 'Sine.easeIn'
       });
   
       // Animate anime container // using the timeline method
-      timeline.to('#anime-container', { // add html shit ok
-        opacity: 1,
-        display: 'flex',
-        duration: 2,
-        ease: 'Sine.easeIn',
-        delay: 1 
-      });
+      // timeline.to('#anime-container', { // add html shit ok
+      //   opacity: 1,
+      //   display: 'flex',
+      //   duration: 2,
+      //   ease: 'Sine.easeIn',
+      //   delay: 1 
+      // });
   
       // Animate camera to spin and look at the mesh
-      timeline.to(this.camera.rotation, {
-        y: Math.PI * 2,
-        duration: animationDuration,
-        delay: 1
-      });
+      // timeline.to(this.camera.rotation, {
+      //   y: Math.PI * 2,
+      //   duration: animationDuration,
+      //   delay: 1
+      // });
   
-      timeline.to(this.camera.lookAt, {
-        x: this.mesh.position.x,
-        y: this.mesh.position.y,
-        z: this.mesh.position.z,
-        duration: animationDuration,
-        delay: -animationDuration
-      });
-  
-    });
+      // timeline.to(this.camera.lookAt, {
+      //   x: this.mesh.position.x,
+      //   y: this.mesh.position.y,
+      //   z: this.mesh.position.z,
+      //   duration: animationDuration,
+      //   delay: -animationDuration
+      // });
+
+      // Rest of your animation code...
+    
+    }, 2500); // 5000 milliseconds = 5 seconds delay
   }
   
 
   // setup camera settings
-  cameraMovement() {
-    var camTR = document.getElementById('button2')
-    camTR.addEventListener('click', () => {
-      console.log('camera prev: ', this.camera.position);
-      this.camera.position.z = this.settings.camera
-    })
-  }
+  // cameraMovement() {
+  //   var camTR = document.getElementById('button2')
+  //   camTR.addEventListener('click', () => {
+  //     console.log('camera prev: ', this.camera.position);
+  //     this.camera.position.z = this.settings.camera
+  //   })
+  // }
 
   // setup new animations
 

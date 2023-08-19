@@ -1,46 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iago.carneiro - Code Samples</title>
-  </head>
-  <body>
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Iago.carneiro - Code Samples</title>
+</head>
+
+<body>
    <main>
       <header>
-         <div class="base" id="base">
-           <div class="menu" id="menu">
-              <div class="icon">
-                 <div class="bar"></div>
-              </div>
-           </div>
-           <div class="icons">
-              <i class="fa icon-menu-1" aria-hidden="true">
-               <img src="./icons/linkedin.svg" />
-              </i>
-              <i class="fa icon-menu-2 button" aria-hidden="true">
-               Discover and explore
-              </i>
-              <i class="fa icon-menu-3" aria-hidden="true">
-               <img src="./icons/github.svg" />
-              </i>
-           </div>
-           <div class="section">
-              <div class="cover1">
-                 <div class="cover2">
-                    <a class="content" id="nv1" href="#showcase"></a>
-                 </div>
-              </div>
-           </div>
-           <a class="section-static top" href="#profile"></a>
-           <a class="section-static bottom" id="button2" href="#projects"></a>
-        </div>
-       </header>
-       <div id="webgl">
-         <div class="cortina"></div>
-       </div>
+         <header class="header">
+            <a href="#" class="logo">
+               Visual Abstract Digital Graphics</a>
 
-       <div id="anime-container">
+            <input type="checkbox" id="check" />
+            <label for="check" class="icons">
+               <i class="bx bx-menu" id="menu-icon"></i>
+               <i class="bx bx-x" id="close-icon"></i>
+            </label>
+
+            <nav class="navbar">
+               <a href="#" class="nav-item" style="--i: 0">Home</a>
+               <a href="#" class="nav-item" style="--i: 1">WebGL</a>
+               <!-- <a href="#" class="nav-item" style="--i: 2">Programming</a> -->
+               <!-- <a href="#" class="nav-item" style="--i: 3">Game Development</a> -->
+               <a href="#" class="nav-item" style="--i: 4">Contact</a>
+            </nav>
+         </header>
+      </header>
+      <div id="webgl">
+         <div class="cortina"></div>
+      </div>
+
+      <div id="anime-container">
          <article class="p-anim-1" id="a">
             <h1>A</h1>
          </article>
@@ -53,8 +46,11 @@
          <article class="p-anim-4" id="d">
             <h1>Y</h1>
          </article>
-       </div>
+      </div>
    </main>
-   <aside id="loading"><h1>Loading...</h1></aside>
-  </body>
+   <aside id="loading">
+      <h1>Loading...</h1>
+   </aside>
+</body>
+
 </html>

@@ -7,9 +7,10 @@ module.exports = {
     mode: dev ? 'development' : 'production',
     devtool: dev ? 'eval-source-map' : 'source-map',
     entry: {
-        index: path.resolve(__dirname, 'src', 'main.js'), // homepage
-        curlnoise: './src/templates/curlnoise/index.js', // entry for curl noise project
-        project: './src/templates/project/index.js' // entry for project template
+        index: path.resolve(__dirname, 'src', 'main.js'), 
+        // project: './src/templates/project/index.js', // entry for project template
+        basicdistortions: './src/templates/basicdistortions/index.js', 
+        curlnoise: './src/templates/curlnoise/index.js', 
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -29,13 +30,19 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/templates/curlnoise/index.html',
             chunks: ['curlnoise'], // Include page bundle
-            filename: 'curlnoise', // Output filename
+            filename: 'curlnoise.html', // Output filename
         }),
         new HtmlWebpackPlugin({
-            template: './src/templates/project/index.html', // Template for project
-            chunks: ['project'], // Specify the chunks for this HTML file
-            filename: 'project', // Output filename
+            template: './src/templates/basicdistortions/index.html', // Template for project
+            chunks: ['basicdistortions'], // Specify the chunks for this HTML file
+            filename: 'basicdistortions.html', // Output filename
         }),
+        // Example
+        // new HtmlWebpackPlugin({
+        //     template: './src/templates/project/index.html', // Template for project
+        //     chunks: ['project'], // Specify the chunks for this HTML file
+        //     filename: 'project', // Output filename
+        // }),
     ],
     module: {
         rules: [
