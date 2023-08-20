@@ -23,6 +23,7 @@ import fragment from '../../shader/f_shader.glsl';
 import fragmentSimulation from '../../shader/fragmentSimulation.glsl';
 
 // import tulip from '../public/tulip.glb'
+import MobileMenu from '../../component/MobileMenu';
 
 const WIDTH = 128;
 
@@ -84,18 +85,14 @@ export default class Particled {
     // initialize the GPUComputationRenderer
     this.initGPGPU();
     this.addMesh();
-    this.addPlane();
 
     this.resize();
     this.render();
     this.setupResize();
     this.settings();
-    // this.setupMenu();
     this.setupAnimations();
-    // this.post();
-    // this.cameraMovement();
-    this.startA();
-    this.debugA();
+    // Create an instance of the MobileMenu class
+    this.mobileMenuInstance = new MobileMenu();
   }
   
   // post processing effects
@@ -247,37 +244,6 @@ export default class Particled {
     this.scene.add(this.mesh);
   }
 
-  addPlane() {
-     // THREE ShaderMaterial is using glsl vertex and fragment
-     this.material2 = new THREE.ShaderMaterial({
-      extensions: {
-        derivatives: '#extension GL_OES_standard_derivatives :enable',
-      },
-      uniforms: {
-        time: { type: 'f', value: 0 },
-        positionTexture: {  value: null },
-        resolution: { type: 'v4', value: new THREE.Vector4() },
-      },
-      blending: THREE.AdditiveBlending,
-      vertexShader: vertex,
-      fragmentShader: fragment,
-    });
-
-    this.geometry2 = new THREE.IcosahedronGeometry(120, 20);
-
-    // this.material2 = new THREE.MeshBasicMaterial();
-
-    // this.geometry = this.model.geometry; // alternatively loading the model
-    this.plane = new THREE.Mesh(this.geometry2, this.material2);
-
-    this.plane.visible = false;
-
-    // this.plane.position.z = 200;
-    // this.plane.position.x = 20;
-
-    this.scene.add(this.plane);
-  }
-
   stop() {
     this.isPlaying = false;
   }
@@ -306,34 +272,14 @@ export default class Particled {
 
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera); // using the composer without bloom post
-    // this.composer.render();
   }
-
-  // setupMenu() {
-  //   var openState = false;
-  //   var base = document.getElementById('base');
-
-  //   this.menu.addEventListener('click', () => {
-  //     base.classList.toggle('open');
-  //   })
-
-  //   this.container.addEventListener('click', () => {
-  //     if (base.classList.contains('open')) {
-  //       base.classList.toggle('open')
-  //     } 
-  //   })
-  // }
 
   // use gsap to animate stuff
   setupAnimations() {
-    // const base = document.getElementById('base');
-    // const trigger = document.getElementById('nv1');
     const animationDuration = 2;
     const restartDelay = 5;
 
     setTimeout(() => {
-      // base.classList.contains('open') ? base.classList.remove('open') : '';
-      // console.log('init', this.time);
   
       const timeline = gsap.timeline({});
     
@@ -344,7 +290,7 @@ export default class Particled {
         ease: 'Sine.easeInOut'
       });
   
-      console.log('cortina with Power2.easeInOut');
+      // console.log('cortina with Power2.easeInOut');
   
       // Animate camera position
       gsap.to(this.camera.position, {
@@ -369,88 +315,31 @@ export default class Particled {
       });
   
       // Animate anime container // using the timeline method
-      // timeline.to('#anime-container', { // add html shit ok
-      //   opacity: 1,
-      //   display: 'flex',
-      //   duration: 2,
-      //   ease: 'Sine.easeIn',
-      //   delay: 1 
-      // });
+      timeline.to('#anime-container', { // add html shit ok
+        opacity: 1,
+        display: 'flex',
+        duration: 2,
+        ease: 'Sine.easeIn',
+        delay: 1 
+      });
   
       // Animate camera to spin and look at the mesh
-      // timeline.to(this.camera.rotation, {
-      //   y: Math.PI * 2,
-      //   duration: animationDuration,
-      //   delay: 1
-      // });
+      timeline.to(this.camera.rotation, {
+        y: Math.PI * 2,
+        duration: animationDuration,
+        delay: 1
+      });
   
-      // timeline.to(this.camera.lookAt, {
-      //   x: this.mesh.position.x,
-      //   y: this.mesh.position.y,
-      //   z: this.mesh.position.z,
-      //   duration: animationDuration,
-      //   delay: -animationDuration
-      // });
+      timeline.to(this.camera.lookAt, {
+        x: this.mesh.position.x,
+        y: this.mesh.position.y,
+        z: this.mesh.position.z,
+        duration: animationDuration,
+        delay: -animationDuration
+      });
 
-      // Rest of your animation code...
-    
-    }, 2500); // 5000 milliseconds = 5 seconds delay
+    }, 2500); 
   }
-  
-
-  // setup camera settings
-  // cameraMovement() {
-  //   var camTR = document.getElementById('button2')
-  //   camTR.addEventListener('click', () => {
-  //     console.log('camera prev: ', this.camera.position);
-  //     this.camera.position.z = this.settings.camera
-  //   })
-  // }
-
-  // setup new animations
-
-  // ideas
-
-  // dispose the current mesh and add another one
-  // add THREE texts
-  // change shader values
-  startA() {
-    var a = document.getElementById('a')
-    a.addEventListener('click', () => {
-      this.mesh.visible = false;
-
-      this.plane.visible = true;
-
-      // camera.position.set(400, 400, 800);
-      // camera.lookAt(0, 600, 0);
-      // camera.rotation.z = Math.PI
-      this.plane.rotateZ = Math.PI / 2.6;
-      this.plane.position.x = 20;
-
-      // this.plane.rotateY = 2
-      console.log('plane',this.plane);
-      console.log(this.camera.position);
-      // console.log();
-      // gsap.to(this.camera.position, {
-      //   x: 67, 
-      //   y: -85, 
-      //   z: 1140,
-      //   duration: 2
-      // })
-    })
-  }
-  debugA() {
-    var b = document.getElementById('b')
-    b.addEventListener('click', () => {
-      console.log(this.camera.position);
-      console.log('plane',this.plane.position);
-      // this.camera.lookAt(this.plane.getWorldPosition);
-      this.camera.lookAt(20,0,0);
-      
-    })
-  }
-
-
 }
 
 new Particled({

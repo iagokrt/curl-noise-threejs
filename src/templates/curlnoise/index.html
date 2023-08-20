@@ -4,7 +4,7 @@
 <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   <title>Iago.carneiro - Basic Fragment Distortion</title>
+   <title>Iago.carneiro - Curl Noise Distortion Example</title>
 </head>
 
 <body>
@@ -20,32 +20,26 @@
                <i class="bx bx-x" id="close-icon"></i>
             </label>
 
-            <nav class="navbar">
-               <a href="#" class="nav-item" style="--i: 0">Home</a>
-               <a href="#" class="nav-item" style="--i: 1">WebGL</a>
-               <!-- <a href="#" class="nav-item" style="--i: 2">Programming</a> -->
-               <!-- <a href="#" class="nav-item" style="--i: 3">Game Development</a> -->
-               <a href="#" class="nav-item" style="--i: 4">Contact</a>
+            <nav class="navbar desktop-menu">
+               <a href="#" class="nav-item" style="--i: 1">Home</a>
+               <a href="#" class="nav-item" style="--i: 2">WebGL</a>
+               <a href="#" class="nav-item" style="--i: 3">Contact</a>
             </nav>
+            <span class="nav-icon">
+               <a href="#" id="nav-icon" class="nav-item" style="--i: 0">☰</a>
+            </span>
+            <nav class="mobile-menu">
+               <div class="wrapper">
+                  <!-- <a href="" class="nav-item" style="--i: 1">Home</a> -->
+                  <a href="curlnoise.html" class="nav-item" style="--i: 2">Curl Noise Example</a>
+                  <a href="basicdistortions.html" class="nav-item" style="--i: 2">Basic Fragment Distortions</a>
+                  <!-- <a href="#" class="nav-item" style="--i: 3">Contact</a> -->
+               </div>
+           </nav>
          </header>
       </header>
       <div id="webgl">
          <div class="cortina"></div>
-      </div>
-
-      <div id="anime-container">
-         <article class="p-anim-1" id="a">
-            <h1>A</h1>
-         </article>
-         <article class="p-anim-2" id="b">
-            <h1>B</h1>
-         </article>
-         <article class="p-anim-3" id="c">
-            <h1>X</h1>
-         </article>
-         <article class="p-anim-4" id="d">
-            <h1>Y</h1>
-         </article>
       </div>
    </main>
    <aside id="loading">
