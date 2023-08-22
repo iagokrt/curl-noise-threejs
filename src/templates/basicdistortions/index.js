@@ -20,7 +20,7 @@ import '../../styles/global.scss';
 
 import vertex from '../../shader/v_shader.glsl';
 import fragment from '../../shader/f_shader.glsl';
-import fragmentSimulation from '../../shader/fragmentSimulation.glsl';
+// import fragmentSimulation from '../../shader/fragmentSimulation.glsl';
 
 import MobileMenu from '../../component/MobileMenu';
 

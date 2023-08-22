@@ -484,7 +484,7 @@ header {
    display: flex;
    justify-content: space-between;
    align-items: center;
-   z-index: 5;
+   // z-index: 5;
 }
 
 .header::before {
@@ -601,4 +601,7 @@ header {
 .mobile-menu .wrapper {
    display: flex;
    flex-direction: column;
+}
+.dg.a {
+   border: 2px solid darkblue;
 }

@@ -11,6 +11,7 @@ module.exports = {
         // project: './src/templates/project/index.js', // entry for project template
         basicdistortions: './src/templates/basicdistortions/index.js', 
         curlnoise: './src/templates/curlnoise/index.js', 
+        sculpture: './src/templates/sculpture/index.js', 
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -29,13 +30,18 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: './src/templates/curlnoise/index.html',
-            chunks: ['curlnoise'], // Include page bundle
-            filename: 'curlnoise.html', // Output filename
+            chunks: ['curlnoise'],
+            filename: 'curlnoise.html',
         }),
         new HtmlWebpackPlugin({
-            template: './src/templates/basicdistortions/index.html', // Template for project
-            chunks: ['basicdistortions'], // Specify the chunks for this HTML file
-            filename: 'basicdistortions.html', // Output filename
+            template: './src/templates/basicdistortions/index.html', 
+            chunks: ['basicdistortions'], 
+            filename: 'basicdistortions.html', 
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/templates/sculpture/index.html', 
+            chunks: ['sculpture'], 
+            filename: 'sculpture.html',
         }),
         // Example
         // new HtmlWebpackPlugin({
