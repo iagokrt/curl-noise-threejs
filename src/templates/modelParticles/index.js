@@ -65,14 +65,12 @@ export default class Particled {
       DEFAULT_CAMERA.far
     );
 
-    this.camera.position.set(11.5, 0, 0);
+    this.camera.position.set(-8.6, 0.2, -6.5);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
     this.isPlaying = true;
-
-      // this.gui.close();
 
     this.addMesh();
     this.addLights();

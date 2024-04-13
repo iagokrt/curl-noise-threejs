@@ -4,6 +4,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import nefertiti from '../models/nefertiti_bust.glb';
 
+import CustomShader from './CustomShader';
+
 export default class ModelLoader {
   constructor(scene) {
     this.scene = scene;
@@ -15,12 +17,18 @@ export default class ModelLoader {
     const modelPath = nefertiti; // Replace with the actual path to your GLB model
     this.loader.load(modelPath, (gltf) => {
       const modelObject = gltf.scene.children[0];
-      const modelMesh = modelObject.children[0].children[0].children[0].children[0];
+      const mesh = modelObject.children[0].children[0].children[0].children[0];
 
-      // Optionally, you can perform operations on the loaded model
-      // before adding it to the scene
-      // this.modelMesh.rotation
-      this.scene.add(modelMesh);
+      // Creating THREE ShaderMaterial 
+      this.customMaterial = new CustomShader();
+
+      console.log('shader:', this.customMaterial);
+
+      console.log('mesh:', mesh);
+
+      // this.modelMesh.material = this.customMaterial;
+
+      this.scene.add(mesh);
     });
   }
 }
