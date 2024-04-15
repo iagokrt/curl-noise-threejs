@@ -25,6 +25,144 @@ var DEFAULT_CAMERA = {
   far: 2000
 }
 
+class HTMLContentGenerator {
+  static generateMainContent() {
+      const main = document.createElement('main');
+
+      const header = document.createElement('header');
+
+      const headerInner = document.createElement('header');
+      headerInner.classList.add('header');
+
+      const logo = document.createElement('a');
+      logo.href = '#';
+      logo.classList.add('logo');
+      logo.textContent = 'Nefertiti: Exploring Lights and Shadows';
+
+      const inputCheckbox = document.createElement('input');
+      inputCheckbox.type = 'checkbox';
+      inputCheckbox.id = 'check';
+
+      const labelIcons = document.createElement('label');
+      labelIcons.htmlFor = 'check';
+      labelIcons.classList.add('icons');
+
+      const menuIcon = document.createElement('i');
+      menuIcon.classList.add('bx', 'bx-menu');
+      menuIcon.id = 'menu-icon';
+
+      const closeIcon = document.createElement('i');
+      closeIcon.classList.add('bx', 'bx-x');
+      closeIcon.id = 'close-icon';
+
+      labelIcons.appendChild(menuIcon);
+      labelIcons.appendChild(closeIcon);
+
+      const desktopMenu = document.createElement('nav');
+      desktopMenu.classList.add('navbar', 'desktop-menu');
+
+      const navItemsDesktop = [
+          { text: 'Start', href: '#start', class: 'start' },
+          { text: 'About this Experiment', href: '#about' },
+          { text: 'Credits', href: '#credits' }
+      ];
+
+      navItemsDesktop.forEach(item => {
+          const navItem = document.createElement('a');
+          navItem.href = item.href;
+          navItem.classList.add('nav-item');
+          if (item.class) {
+            navItem.classList.add(item.class);
+          }
+          navItem.classList.add('nav-item');
+          navItem.textContent = item.text;
+          desktopMenu.appendChild(navItem);
+      });
+
+      const navIcon = document.createElement('span');
+      navIcon.classList.add('nav-icon');
+
+      const navIconLink = document.createElement('a');
+      navIconLink.href = '#';
+      navIconLink.id = 'nav-icon';
+      navIconLink.classList.add('nav-item');
+      navIconLink.textContent = '☰';
+
+      navIcon.appendChild(navIconLink);
+
+      const mobileMenu = document.createElement('nav');
+      mobileMenu.classList.add('mobile-menu');
+
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('wrapper');
+
+      const navItemsMobile = [
+          { text: 'Start', href: '#start' },
+          { text: 'About this Experiment', href: '#about' },
+          { text: 'Credits', href: '#credits' }
+      ];
+
+      navItemsMobile.forEach(item => {
+          const navItem = document.createElement('a');
+          navItem.href = item.href;
+          navItem.classList.add('nav-item');
+          // navItem.style.cssText = item.style;
+          navItem.textContent = item.text;
+          wrapper.appendChild(navItem);
+      });
+
+      mobileMenu.appendChild(wrapper);
+
+      headerInner.appendChild(logo);
+      headerInner.appendChild(inputCheckbox);
+      headerInner.appendChild(labelIcons);
+      headerInner.appendChild(desktopMenu);
+      headerInner.appendChild(navIcon);
+      headerInner.appendChild(mobileMenu);
+
+      header.appendChild(headerInner);
+
+      const webglDiv = document.createElement('div');
+      webglDiv.id = 'webgl';
+
+      main.appendChild(header);
+      main.appendChild(webglDiv);
+
+      return main;
+  }
+
+  static generateLoadingContent() {
+      const aside = document.createElement('aside');
+      aside.id = 'loading';
+
+      const h1 = document.createElement('h1');
+      h1.textContent = 'Loading...';
+
+      aside.appendChild(h1);
+
+      return aside;
+  }
+}
+class MenuHandler {
+  constructor() {
+      this.startItem = document.querySelector('.start'); // Seleciona o item com a classe 'start'
+      this.startItem.addEventListener('click', this.handleStartClick.bind(this)); // Adiciona um event listener para o clique no item 'start'
+  }
+
+  handleStartClick(event) {
+      event.preventDefault(); // Evita o comportamento padrão do link
+
+      console.log("Item 'start' clicado!");
+
+      this.headerElement = document.querySelector('.header');
+      this.navbarElement = document.querySelector('.navbar');
+
+      // Adiciona as classes de animações
+      this.headerElement.classList.add('collapsed');
+      this.navbarElement.classList.add('hidden');
+  }
+}
+
 export default class Particled {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -39,7 +177,7 @@ export default class Particled {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(this.state.renderer.setClearColor.color, this.state.renderer.setClearColor.alpha);
+    this.renderer.setClearColor(0x01080B, this.state.renderer.setClearColor.alpha);
     // this.renderer.physicallyCorrectLights = true;
 
     this.container.appendChild(this.renderer.domElement);
@@ -65,14 +203,12 @@ export default class Particled {
       DEFAULT_CAMERA.far
     );
 
-    this.camera.position.set(11.5, 0, 0);
+    this.camera.position.set(10.5, 3.2, -2);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
     this.isPlaying = true;
-
-      // this.gui.close();
 
     this.addMesh();
     this.addLights();
@@ -123,30 +259,22 @@ export default class Particled {
   }
 
   addMesh() {
-    let that = this;
-    // console.log(this.scene);
-    // console.log(this.renderer);
+    // Criar uma promessa para aguardar o carregamento do modelo
+    const modelLoadedPromise = new Promise((resolve, reject) => {
+        this.loadedModel = new ModelLoader(this.scene);
+        // this.loadedModel.onLoad(() => {
+        //     resolve();
+        // });
+    });
 
-    // Creating THREE ShaderMaterial 
-    this.customShader = new CustomShader();
+    // Quando a promessa for resolvida (ou seja, o modelo estiver completamente carregado)
+    // modelLoadedPromise.then(() => {
+    //     // Agora você pode acessar as propriedades de posição e rotação do modelo
+    //     console.log("Model position:", this.loadedModel.mesh.position);
+    //     console.log("Model rotation:", this.loadedModel.mesh.rotation);
+    // });
 
-    // Use the ModelLoader to load the modelMesh
-    this.loadedModel = new ModelLoader(this.scene);
-
-    // this.nefertiti = this.loadedModel.scene;
-
-    // console.log('this.nefertiti: ', this.nefertiti);
-
-    // this.nefertiti.rotation.set(Math.PI / 2, Math.PI, 0); // Set the default rotation
-
-    // this.nefertiti.position.x = 1.45;
-    // this.nefertiti.position.y = -0.8;
-    // this.nefertiti.position.z = 1.67;
-
-    // this.mesh.material = this.customShader.material;
   }
-
-
 
   stop() {
     this.isPlaying = false;
@@ -159,33 +287,17 @@ export default class Particled {
     }
   }
 
-  // setting modules 
+  // setting module
   settings() {
     let that = this;
 
     this.gui = new dat.GUI();
+    this.gui.close();
     // Camera controls
     this.cameraControls = this.gui.addFolder('Camera');
-    this.cameraControls.add(this.camera.position, 'x', -10, 10).step(0.1);
-    this.cameraControls.add(this.camera.position, 'y', -10, 10).step(0.1);
-    this.cameraControls.add(this.camera.position, 'z', -10, 10).step(0.1);
-
-    // Model controls
-    if (this.nefertiti) {
-      this.modelRotationControls = this.gui.addFolder('Model Rotation');
-      // this.modelRotationControls.add(this.nefertiti.rotation, 'x', 0, Math.PI * 2).step(0.01);
-      // this.modelRotationControls.add(this.nefertiti.rotation, 'y', 0, Math.PI * 2).step(0.01);
-      // this.modelRotationControls.add(this.nefertiti.rotation, 'z', 0, Math.PI * 2).step(0.01);
-
-      this.modelPositionControls = this.gui.addFolder('Model Position');
-      // this.modelPositionControls.add(this.nefertiti.position, 'x', -10, 10).step(0.01);
-      // this.modelPositionControls.add(this.nefertiti.position, 'y', -10, 10).step(0.01);
-      // this.modelPositionControls.add(this.nefertiti.position, 'z', -10, 10).step(0.01);
-
-    }
-    // this.modelControls.add(this.mesh.rotation, 'x', 0, Math.PI * 2).step(0.01);
-    // this.modelControls.add(this.mesh.rotation, 'y', 0, Math.PI * 2).step(0.01);
-    // this.modelControls.add(this.mesh.rotation, 'z', 0, Math.PI * 2).step(0.01);
+    this.cameraControls.add(this.camera.position, 'x', -20, 20).step(0.05);
+    this.cameraControls.add(this.camera.position, 'y', -20, 20).step(0.05);
+    this.cameraControls.add(this.camera.position, 'z', -20, 20).step(0.05);
 
     // Light controls
     this.lightControls = this.gui.addFolder('Light');
@@ -198,15 +310,29 @@ export default class Particled {
 
     this.time += 0.05;
 
-    // this.nefertiti.rotation.z += 0.002; // not working undefined
-
+    // this.loadedModel.rotation += 0.02; // not working undefined
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera);
 
   }
 }
 
-new Particled({
-  dom: document.getElementById('webgl'),
-  menu: document.getElementById('menu')
+document.addEventListener('DOMContentLoaded', () => {
+  const mainContent = HTMLContentGenerator.generateMainContent();
+  const loadingContent = HTMLContentGenerator.generateLoadingContent();
+
+  document.body.appendChild(mainContent);
+  document.body.appendChild(loadingContent);
+
+  new MenuHandler();
+
+  new Particled({
+    dom: document.getElementById('webgl'),
+    menu: document.getElementById('menu')
+  });
+
+  var tt= document.querySelector('.start');
+
+  tt.click();
+  // console.log(tt)
 });

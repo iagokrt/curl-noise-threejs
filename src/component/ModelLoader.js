@@ -1,8 +1,7 @@
-// ModelLoader.js
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-
 import nefertiti from '../models/nefertiti_bust.glb';
+
+// ModelLoader.js
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 import CustomShader from './CustomShader';
 
@@ -21,14 +20,19 @@ export default class ModelLoader {
 
       // Creating THREE ShaderMaterial 
       this.customMaterial = new CustomShader();
-
-      console.log('shader:', this.customMaterial);
-
-      console.log('mesh:', mesh);
-
-      // this.modelMesh.material = this.customMaterial;
+      // console.log('shader:', this.customMaterial);
 
       this.scene.add(mesh);
+
+      mesh.position.setY(-0.85);
+      mesh.position.setZ(-0.25);
+
+      mesh.rotation.set(-Math.PI*2/4,0,Math.PI/2);
+
+      // console.log("Model position:", mesh.position);
+      // console.log("Model rotation:", mesh.rotation);
+
+      // mesh.
     });
   }
 }

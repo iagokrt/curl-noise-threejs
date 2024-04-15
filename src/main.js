@@ -43,9 +43,8 @@ class HTMLContentGenerator {
       const navItems = [
           { text: 'WebGL', href: 'index.html' },
           { text: '#1 Basic distortions', href: 'basicdistortions.html' },
-          { text: '#2 Curl noise', href: 'curlnoise.html' },
-          // { text: '#3 Model Nefertiti', href: 'modelparticles.html' },
-          { text: '#3 Model Sculpture', href: 'sculpture.html' },
+          { text: '#2 Curl noise + gsap', href: 'curlnoise.html' },
+          { text: '#3 Nefertiti Sculpture', href: 'sculpture.html' },
 
           { text: 'Contact', href: '#' }
       ];

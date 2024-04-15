@@ -17,7 +17,8 @@ canvas {
 }
 
 .hidden {
-   display: none;
+   display: none !important;
+   transition: all 1.5s linear;
 }
 
 // theme default
@@ -499,6 +500,7 @@ header {
    justify-content: space-between;
    align-items: center;
    // z-index: 5;
+   transition: width 0.85s ease-in;
 }
 
 .header::before {
@@ -618,4 +620,9 @@ header {
 }
 .dg.a {
    border: 2px solid darkblue;
+}
+
+// custom html transitions
+.header.collapsed {
+   width: 0%; /* Muda a largura para 0% quando a classe 'collapsed' é adicionada */
 }
