@@ -38,6 +38,55 @@ const DEFAULT_CAMERA = {
   near:0.001,
   far:2000
 }
+
+class HTMLContentGenerator {
+  static generateMainContent() {
+      const main = document.createElement('main');
+
+      const header = document.createElement('header');
+      header.classList.add('header');
+
+      const logoHome = document.createElement('a');
+      logoHome.href = 'index.html';
+      logoHome.classList.add('logo');
+      logoHome.title = 'Navigate back to homepage';
+      logoHome.textContent = 'WebGL ';
+
+      const breadcrumbSeparator = document.createElement('span');
+      breadcrumbSeparator.classList.add('breadcrumb-separator');
+      breadcrumbSeparator.textContent = '›';
+
+      const logoItem = document.createElement('a');
+      logoItem.href = '#';
+      logoItem.classList.add('logo', 'logo-item');
+      logoItem.textContent = ' Curl Noise Distortions';
+
+      header.appendChild(logoHome);
+      header.appendChild(breadcrumbSeparator);
+      header.appendChild(logoItem);
+
+      const webglDiv = document.createElement('div');
+      webglDiv.id = 'webgl';
+
+      main.appendChild(header);
+      main.appendChild(webglDiv);
+
+      return main;
+  }
+
+  static generateLoadingContent() {
+      const aside = document.createElement('aside');
+      aside.id = 'loading';
+
+      const h1 = document.createElement('h1');
+      h1.textContent = 'Loading...';
+
+      aside.appendChild(h1);
+
+      return aside;
+  }
+}
+
 export default class Particled {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -295,14 +344,9 @@ export default class Particled {
       // Animate camera position
       gsap.to(this.camera.position, {
         z: -25.7, // cam step 1
-        duration: 3.8 // cam step 1 duration
-      }).then(() => {
-        gsap.to(this.camera.position, {
-          z: -900, // cam step 2
-          duration: 8.4, // cam step 2 duration
-          delay: 4.4 // delay is bigger then duration for step 1
-        })
-      });
+        duration: 4.2 // cam step 1 duration
+      })
+   
   
       // Animate mesh rotation
       gsap.to(this.mesh.rotation, {
@@ -310,39 +354,41 @@ export default class Particled {
         // y: Math.PI,
         z: Math.PI,
         delay: 3,
-        duration: 8,
+        duration: 6,
         ease: 'Sine.easeIn'
+      })
+      .then(() => {
+        gsap.to(this.camera.position, {
+          z: -900, // cam step 2
+          duration: 1.4, // cam step 2 duration
+          delay: 5.4 // delay is bigger then duration for step 1
+        })
       });
+      // .then(() => {
+      //   gsap.to(this.mesh.rotation, {
+      //     x: Math.PI,
+      //     y: Math.PI,
+      //     z: Math.PI,
+      //     delay: 2.5,
+      //     duration: 4,
+      //     ease: 'Sine.easeOut'
+          
+      //   })
+      // })
   
-      // Animate anime container // using the timeline method
-      timeline.to('#anime-container', { // add html shit ok
-        opacity: 1,
-        display: 'flex',
-        duration: 2,
-        ease: 'Sine.easeIn',
-        delay: 1 
-      });
-  
-      // Animate camera to spin and look at the mesh
-      timeline.to(this.camera.rotation, {
-        y: Math.PI * 2,
-        duration: animationDuration,
-        delay: 1
-      });
-  
-      timeline.to(this.camera.lookAt, {
-        x: this.mesh.position.x,
-        y: this.mesh.position.y,
-        z: this.mesh.position.z,
-        duration: animationDuration,
-        delay: -animationDuration
-      });
-
     }, 2500); 
   }
 }
 
-new Particled({
-  dom: document.getElementById('webgl'),
-  menu: document.getElementById('menu')
+document.addEventListener('DOMContentLoaded', () => {
+  const mainContent = HTMLContentGenerator.generateMainContent();
+  const loadingContent = HTMLContentGenerator.generateLoadingContent();
+
+  document.body.appendChild(mainContent);
+  document.body.appendChild(loadingContent);
+
+  new Particled({
+    dom: document.getElementById('webgl'),
+    menu: document.getElementById('menu')
+  });
 });

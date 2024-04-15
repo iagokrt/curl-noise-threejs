@@ -35,6 +35,55 @@ const DEFAULT_CAMERA = {
   near:0.01,
   far:2000
 }
+
+class HTMLContentGenerator {
+  static generateMainContent() {
+      const main = document.createElement('main');
+
+      const header = document.createElement('header');
+      header.classList.add('header');
+
+      const logoHome = document.createElement('a');
+      logoHome.href = 'index.html';
+      logoHome.classList.add('logo');
+      logoHome.title = 'Navigate back to homepage';
+      logoHome.textContent = 'WebGL ';
+
+      const breadcrumbSeparator = document.createElement('span');
+      breadcrumbSeparator.classList.add('breadcrumb-separator');
+      breadcrumbSeparator.textContent = '›';
+
+      const logoItem = document.createElement('a');
+      logoItem.href = '#';
+      logoItem.classList.add('logo', 'logo-item');
+      logoItem.textContent = ' Basic Fragment Distortion';
+
+      header.appendChild(logoHome);
+      header.appendChild(breadcrumbSeparator);
+      header.appendChild(logoItem);
+
+      const webglDiv = document.createElement('div');
+      webglDiv.id = 'webgl';
+
+      main.appendChild(header);
+      main.appendChild(webglDiv);
+
+      return main;
+  }
+
+  static generateLoadingContent() {
+      const aside = document.createElement('aside');
+      aside.id = 'loading';
+
+      const h1 = document.createElement('h1');
+      h1.textContent = 'Loading...';
+
+      aside.appendChild(h1);
+
+      return aside;
+  }
+}
+
 export default class Particled {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -148,7 +197,15 @@ export default class Particled {
   }
 }
 
-new Particled({
-  dom: document.getElementById('webgl'),
-  menu: document.getElementById('menu')
+document.addEventListener('DOMContentLoaded', () => {
+  const mainContent = HTMLContentGenerator.generateMainContent();
+  const loadingContent = HTMLContentGenerator.generateLoadingContent();
+
+  document.body.appendChild(mainContent);
+  document.body.appendChild(loadingContent);
+
+  new Particled({
+    dom: document.getElementById('webgl'),
+    menu: document.getElementById('menu')
+  });
 });

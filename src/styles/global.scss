@@ -16,6 +16,10 @@ canvas {
    display: block;
 }
 
+.hidden {
+   display: none;
+}
+
 // theme default
 // $primary-dark: #004E64;
 // $primary-light: #007B8A;
@@ -75,6 +79,10 @@ body {
    overflow-x: hidden;
 }
 
+a[href] {
+   cursor: url('../../public/ellipse-zoom.png'), pointer; /* Ajuste o tamanho do cursor personalizado */
+   transition: all 0.45s linear;
+}
 
 .cortina {
    width: 100%;
@@ -465,7 +473,7 @@ header {
 }
 
 
-#navigation-container {}
+// #navigation-container {}
 
 #navigation-menu {
    display: flex;
@@ -475,11 +483,17 @@ header {
 
 /** nav bar **/
 
+.navbar {
+   display: flex;
+   flex-direction: column;
+}
+
 .header {
    position: fixed;
    top: 0;
    left: 0;
    width: 100%;
+   height: 100%;
    padding: 1rem 10%;
    display: flex;
    justify-content: space-between;
@@ -563,7 +577,7 @@ header {
 .nav-icon {
    display: none;
 }
-@media (max-width: 768px) {
+@media (max-width: 668px) {
    .icons {
       display: inline-flex;
    }
