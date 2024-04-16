@@ -21,6 +21,7 @@ class HTMLContentGenerator {
           { text: '#1 Basic distortions', href: 'basicdistortions.html' },
           { text: '#2 Curl noise + gsap', href: 'curlnoise.html' },
           { text: '#3 Nefertiti Sculpture', href: 'sculpture.html' },
+          { text: '#4 Video into Particles', href: 'videointoparticles.html' },
 
           { text: 'Contact', href: '#' }
       ];

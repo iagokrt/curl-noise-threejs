@@ -11,7 +11,8 @@ module.exports = {
         // project: './src/templates/project/index.js', // entry for project template
         basicdistortions: './src/templates/basicdistortions/index.js', 
         curlnoise: './src/templates/curlnoise/index.js', 
-        sculpture: './src/templates/sculpture/index.js', 
+        sculpture: './src/templates/sculpture/index.js',
+        videointoparticles: './src/templates/video/index.js', 
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -42,6 +43,11 @@ module.exports = {
             template: './src/templates/sculpture/index.html', 
             chunks: ['sculpture'], 
             filename: 'sculpture.html',
+        }),
+        new HtmlWebpackPlugin({
+            template: './src/templates/video/index.html', 
+            chunks: ['videointoparticles'], 
+            filename: 'videointoparticles.html',
         }),
         // Example
         // new HtmlWebpackPlugin({
