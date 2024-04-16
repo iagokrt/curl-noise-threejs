@@ -6,7 +6,7 @@ import * as dat from 'dat.gui';
 import gsap from 'gsap';
 
 import '../../styles/global.scss';
-javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = '//mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()
+// javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = '//mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()
 
 import vertex from '../../shader/v_shader.glsl';
 import fragment from '../../shader/f_shader.glsl';
@@ -34,91 +34,61 @@ class HTMLContentGenerator {
       const headerInner = document.createElement('header');
       headerInner.classList.add('header');
 
+      // aside display
+      const headerAside = document.createElement('aside');
+      headerAside.classList.add('logoTitle');
+
       const logo = document.createElement('a');
       logo.href = '#';
       logo.classList.add('logo');
       logo.textContent = 'Nefertiti: Exploring Lights and Shadows';
 
-      const inputCheckbox = document.createElement('input');
-      inputCheckbox.type = 'checkbox';
-      inputCheckbox.id = 'check';
-
-      const labelIcons = document.createElement('label');
-      labelIcons.htmlFor = 'check';
-      labelIcons.classList.add('icons');
-
-      const menuIcon = document.createElement('i');
-      menuIcon.classList.add('bx', 'bx-menu');
-      menuIcon.id = 'menu-icon';
-
-      const closeIcon = document.createElement('i');
-      closeIcon.classList.add('bx', 'bx-x');
-      closeIcon.id = 'close-icon';
-
-      labelIcons.appendChild(menuIcon);
-      labelIcons.appendChild(closeIcon);
+      const logoBackButton = document.createElement('a');
+      logoBackButton.href = '/index.html';
+      logoBackButton.classList.add('logoBackButton');
+      logoBackButton.textContent = '‹ back to homepage';
 
       const desktopMenu = document.createElement('nav');
       desktopMenu.classList.add('navbar', 'desktop-menu');
 
       const navItemsDesktop = [
-          { text: 'Start', href: '#start', class: 'start' },
-          { text: 'About this Experiment', href: '#about' },
-          { text: 'Credits', href: '#credits' }
+          { text: '⦿ Start', href: '#start', class: 'start', info: 'start' },
+          { text: '⦿ About this Experiment', href: '#about', class: 'about', info: 'lorem ipsum descriptior propt from thein yogurt' },
+          { text: '⦿ Credits', href: '#credits', class: 'credits', info: 'credits to yuri artiuk lesson on sculpture to particles, and also the model creator' }
       ];
 
       navItemsDesktop.forEach(item => {
-          const navItem = document.createElement('a');
-          navItem.href = item.href;
-          navItem.classList.add('nav-item');
-          if (item.class) {
-            navItem.classList.add(item.class);
-          }
-          navItem.classList.add('nav-item');
-          navItem.textContent = item.text;
-          desktopMenu.appendChild(navItem);
+        const navItem = document.createElement('a');
+        navItem.href = item.href;
+        navItem.classList.add('nav-item');
+    
+        if (item.class) {
+          navItem.classList.add(item.class);
+        }
+
+        navItem.textContent = item.text;
+
+        if (item.class == 'about') {
+          const navItemDescription = document.createElement('aside');
+          navItemDescription.classList.add('info', 'hidden');
+          navItemDescription.textContent = item.info;
+          navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
+        } 
+
+        if (item.class == 'credits') {
+          const navItemDescription = document.createElement('aside');
+          navItemDescription.classList.add('info', 'hidden');
+          navItemDescription.textContent = item.info;
+          navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
+        } 
+    
+        desktopMenu.appendChild(navItem);
       });
-
-      const navIcon = document.createElement('span');
-      navIcon.classList.add('nav-icon');
-
-      const navIconLink = document.createElement('a');
-      navIconLink.href = '#';
-      navIconLink.id = 'nav-icon';
-      navIconLink.classList.add('nav-item');
-      navIconLink.textContent = '☰';
-
-      navIcon.appendChild(navIconLink);
-
-      const mobileMenu = document.createElement('nav');
-      mobileMenu.classList.add('mobile-menu');
-
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('wrapper');
-
-      const navItemsMobile = [
-          { text: 'Start', href: '#start' },
-          { text: 'About this Experiment', href: '#about' },
-          { text: 'Credits', href: '#credits' }
-      ];
-
-      navItemsMobile.forEach(item => {
-          const navItem = document.createElement('a');
-          navItem.href = item.href;
-          navItem.classList.add('nav-item');
-          // navItem.style.cssText = item.style;
-          navItem.textContent = item.text;
-          wrapper.appendChild(navItem);
-      });
-
-      mobileMenu.appendChild(wrapper);
-
-      headerInner.appendChild(logo);
-      headerInner.appendChild(inputCheckbox);
-      headerInner.appendChild(labelIcons);
+   
+      headerAside.appendChild(logo);
+      headerAside.appendChild(logoBackButton);
+      headerInner.appendChild(headerAside);
       headerInner.appendChild(desktopMenu);
-      headerInner.appendChild(navIcon);
-      headerInner.appendChild(mobileMenu);
 
       header.appendChild(headerInner);
 
@@ -147,6 +117,12 @@ class MenuHandler {
   constructor() {
       this.startItem = document.querySelector('.start'); // Seleciona o item com a classe 'start'
       this.startItem.addEventListener('click', this.handleStartClick.bind(this)); // Adiciona um event listener para o clique no item 'start'
+
+      this.aboutItem = document.querySelector('.about');
+      this.aboutItem.addEventListener('click', this.handleAboutClick.bind(this));
+      
+      this.creditItem = document.querySelector('.credits');
+      this.creditItem.addEventListener('click', this.handleCreditClick.bind(this));
   }
 
   handleStartClick(event) {
@@ -156,11 +132,27 @@ class MenuHandler {
 
       this.headerElement = document.querySelector('.header');
       this.navbarElement = document.querySelector('.navbar');
+      this.navbarElement_start = document.querySelector('.navbar .start');
 
       // Adiciona as classes de animações
       this.headerElement.classList.add('collapsed');
-      this.navbarElement.classList.add('hidden');
+      // this.navbarElement.classList.add('hidden');
+      this.navbarElement_start.classList.add('hidden');
+
   }
+
+  handleAboutClick(event) {
+    event.preventDefault();
+    this.aboutInfo = document.querySelector('.about .info');
+    this.aboutInfo.classList.toggle('hidden');
+  }
+
+  handleCreditClick(event) {
+    event.preventDefault();
+    this.creditInfo = document.querySelector('.credits .info');
+    this.creditInfo.classList.toggle('hidden');
+  }
+
 }
 
 export default class Particled {
@@ -168,6 +160,8 @@ export default class Particled {
     this.scene = new THREE.Scene();
 
     this.state = state;
+
+    this.debug = true;
 
     this.container = options.dom; // document.getElementById('webgl')
     this.menu = options.menu; // document.getelementbyid('menu')
@@ -194,7 +188,7 @@ export default class Particled {
     }
 
     /**
-     * camera and  controls
+     * camera, controls, lights
     */
     this.camera = new THREE.PerspectiveCamera(
       DEFAULT_CAMERA.fov,
@@ -205,10 +199,14 @@ export default class Particled {
 
     this.camera.position.set(10.5, 3.2, -2);
 
+    this.enableLight = 'tt';
+
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.time = 0;
 
     this.isPlaying = true;
+
+    this.settings();
 
     this.addMesh();
     this.addLights();
@@ -216,15 +214,22 @@ export default class Particled {
     this.resize();
     this.render();
     this.setupResize();
-    this.settings();
     // Create an instance of the MobileMenu class
-    this.mobileMenuInstance = new MobileMenu();
+    // this.mobileMenuInstance = new MobileMenu();
   }
 
   addLights() {
+    // Remove as luzes anteriores, se houver
+    this.removeLights();
+
+    // posição das fontes direcionais de luz 
     this.directionalLightPosition = new THREE.Vector3(1, 1, 1);
     this.directionalLightPosition2 = new THREE.Vector3(-1, -1, -1);
-    this.directionalLightPosition3 = new THREE.Vector3(-1, 2, -1);
+    this.directionalLightPosition3 = new THREE.Vector3(1, -2, 1);
+
+    // adiciona a luz orbital
+    // this.orbitalLight = new AddLightObjects(this.scene);
+    // this.orbitalLight.createOrbitLight();
 
     const colors = {
       yellow: 0xffcc00,
@@ -233,15 +238,63 @@ export default class Particled {
       blue: 0x0000ff,
       purple: 0x800080,
       cyan: 0x00ffff,
-      black: 0x000000
+      black: 0x000000,
+      
     };
 
-    this.directionalLight = new AddLightObjects(this.scene, colors.yellow, 0.67, this.directionalLightPosition);
-    this.directionalLight2 = new AddLightObjects(this.scene, colors.purple, 0.51, this.directionalLightPosition2);
-    this.directionalLight3 = new AddLightObjects(this.scene, colors.white, 0.71, this.directionalLightPosition3);
+    // Verifica se a luz está habilitada
+    if (this.enableLight && this.enableLight.enable) {
+      // Adiciona a luz selecionada com base na opção escolhida
+      // console.log('this.selectedLight',this.selectedLight)
+      console.log('this.selectedLight.light:',this.selectedLight.light)
 
-    // this.orbitalLight = new AddLightObjects(this.scene);
-    // this.orbitalLight.createOrbitLight();
+      const lightObjects = new AddLightObjects(this.scene);
+
+      switch(this.selectedLight.light) {
+        case 'directionalLight 1':
+          console.log('directionalLight')
+          this.directionalLight = lightObjects.createDirectionalLight(colors.blue, 0.62, this.directionalLightPosition);
+          break;
+        case 'directionalLight 2':
+          this.directionalLight2 = lightObjects.createDirectionalLight(colors.purple, 0.51, this.directionalLightPosition2);
+          break;
+        case 'directionalLight 3':
+          this.directionalLight3 = lightObjects.createDirectionalLight(colors.white, 0.71, this.directionalLightPosition3);
+          break;
+        default:
+          console.log('not found')
+          break;
+      }
+    }
+
+    if (this.debug) {
+      var count=0;
+      this.scene.traverse((object) => {
+        if (object instanceof THREE.Light) {
+          console.log(object);
+          count++
+        }
+      });
+      console.log('Lights found:', count)
+    }
+    
+  }
+
+  // Método para remover todas as luzes da cena
+  removeLights() {
+    // Remova todas as luzes anteriores, se houver
+    if (this.directionalLight) {
+      this.scene.remove(this.directionalLight);
+      this.directionalLight = null;
+    }
+    if (this.directionalLight2) {
+      this.scene.remove(this.directionalLight2);
+      this.directionalLight2 = null;
+    }
+    if (this.directionalLight3) {
+      this.scene.remove(this.directionalLight3);
+      this.directionalLight3 = null;
+    }
   }
 
   setupResize() {
@@ -293,6 +346,11 @@ export default class Particled {
 
     this.gui = new dat.GUI();
     this.gui.close();
+
+    if (!this.debug) {
+      this.gui.close();
+    }
+
     // Camera controls
     this.cameraControls = this.gui.addFolder('Camera');
     this.cameraControls.add(this.camera.position, 'x', -20, 20).step(0.05);
@@ -300,8 +358,25 @@ export default class Particled {
     this.cameraControls.add(this.camera.position, 'z', -20, 20).step(0.05);
 
     // Light controls
-    this.lightControls = this.gui.addFolder('Light');
-    // this.lightControls.add(this.directionalLight.position.x, 'x', -10, 10).step(0.1);
+    this.lightControls = this.gui.addFolder('Lights');
+    this.lightControls_directionalLight = this.lightControls.addFolder('directionalLight');
+    // this.lightControls_ambientLight = this.lightControls.addFolder('ambientLight');
+
+    // Opções de tipos de luz
+    // const lightOptions = ['Ambient Light', 'Directional Light', 'Point Light', 'Spot Light'];
+    this.lightOptions = ['directionalLight 1', 'directionalLight 2', 'directionalLight 3'];
+    this.selectedLight = { light: 'directionalLight 1' }; // Valor inicial
+    this.lightControls.add(this.selectedLight, 'light', this.lightOptions).name('Select Light').onChange(() => {
+      // Aqui você pode colocar o código para atualizar a fonte de luz na cena
+      this.addLights();
+    });
+
+    // Opção para habilitar/desabilitar a luz
+    this.enableLight = { enable: true }; // Valor inicial
+    this.lightControls.add(this.enableLight, 'enable').name('Enable Light');
+
+    // Adicione outros controles para as propriedades da luz, dependendo da luz selecionada
+    this.lightControls.open(); // Abra o painel de controle de luz
 
   }
 
@@ -333,6 +408,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   var tt= document.querySelector('.start');
 
-  tt.click();
-  // console.log(tt)
+  // tt.click(); // disable open animation
 });

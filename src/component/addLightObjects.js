@@ -1,22 +1,20 @@
 import * as THREE from 'three';
 
 export default class AddLightObjects {
-  constructor(scene, color = 0xffffff, intensity = 1, position = new THREE.Vector3(1, 1, 1)) {
+  constructor(scene) {
     this.scene = scene;
-    this.color = color;
-    this.intensity = intensity;
-    this.position = position;
-
-    this.createDirectionalLight();
+    this.lights = [];
   }
 
-  createDirectionalLight() {
-    const directionalLight = new THREE.DirectionalLight(this.color, this.intensity);
-    directionalLight.position.copy(this.position); // Use the provided position
+  createDirectionalLight(color = 0xffffff, intensity = 1, position = new THREE.Vector3(1, 1, 1)) {
+    this.lights = [];
+    const directionalLight = new THREE.DirectionalLight(color, intensity);
+    directionalLight.position.copy(position); // Use the provided position
     this.scene.add(directionalLight);
+    this.lights.push(directionalLight);
   }
 
-  createOrbitLight(radius = 6, speed = 0.005, color = 0xffffff, intensity = 0.0) {
+  createOrbitLight(radius = 6, speed = 1, color = 0xff0000, intensity = 0.8) {
     const orbitLight = new THREE.PointLight(color, intensity);
     orbitLight.userData.radius = radius;
     orbitLight.userData.speed = speed;

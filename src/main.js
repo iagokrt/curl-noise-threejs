@@ -70,8 +70,8 @@ class HTMLContentGenerator {
 
       navIcon.appendChild(navIconLink);
 
-      const mobileMenu = document.createElement('nav');
-      mobileMenu.classList.add('mobile-menu');
+      // const mobileMenu = document.createElement('nav');
+      // mobileMenu.classList.add('mobile-menu');
 
       const wrapper = document.createElement('div');
       wrapper.classList.add('wrapper');
@@ -85,14 +85,14 @@ class HTMLContentGenerator {
           wrapper.appendChild(navItem);
       });
 
-      mobileMenu.appendChild(wrapper);
+      // mobileMenu.appendChild(wrapper);
 
       headerInner.appendChild(logo);
       headerInner.appendChild(inputCheckbox);
       headerInner.appendChild(labelIcons);
       headerInner.appendChild(desktopMenu);
-      headerInner.appendChild(navIcon);
-      headerInner.appendChild(mobileMenu);
+      // headerInner.appendChild(navIcon);
+      // headerInner.appendChild(mobileMenu);
 
       header.appendChild(headerInner);
 
