@@ -1,15 +1,10 @@
 import './styles/global.scss';
 // javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
 
-import MobileMenu from './component/MobileMenu';
-
 class HTMLContentGenerator {
   static generateMainContent() {
       const main = document.createElement('main');
-      // main.classList.add('hidden');
-
       const header = document.createElement('header');
-
       const headerInner = document.createElement('header');
       headerInner.classList.add('header');
 
@@ -17,25 +12,6 @@ class HTMLContentGenerator {
       logo.href = '#';
       logo.classList.add('logo');
       logo.innerHTML = 'Iago.carneiro <small>| Visual Experiments</small>';
-
-      const inputCheckbox = document.createElement('input');
-      inputCheckbox.type = 'checkbox';
-      inputCheckbox.id = 'check';
-
-      const labelIcons = document.createElement('label');
-      labelIcons.htmlFor = 'check';
-      labelIcons.classList.add('icons');
-
-      const menuIcon = document.createElement('i');
-      menuIcon.classList.add('bx', 'bx-menu');
-      menuIcon.id = 'menu-icon';
-
-      const closeIcon = document.createElement('i');
-      closeIcon.classList.add('bx', 'bx-x');
-      closeIcon.id = 'close-icon';
-
-      labelIcons.appendChild(menuIcon);
-      labelIcons.appendChild(closeIcon);
 
       const desktopMenu = document.createElement('nav');
       desktopMenu.classList.add('navbar', 'desktop-menu');
@@ -53,7 +29,6 @@ class HTMLContentGenerator {
           const navItem = document.createElement('a');
           navItem.href = item.href;
           navItem.classList.add('nav-item');
-          navItem.style.setProperty('--i', index + 1);
           navItem.textContent = item.text;
           desktopMenu.appendChild(navItem);
       });
@@ -65,13 +40,9 @@ class HTMLContentGenerator {
       navIconLink.href = '#';
       navIconLink.id = 'nav-icon';
       navIconLink.classList.add('nav-item');
-      navIconLink.style.setProperty('--i', 0);
       navIconLink.textContent = '☰';
 
       navIcon.appendChild(navIconLink);
-
-      // const mobileMenu = document.createElement('nav');
-      // mobileMenu.classList.add('mobile-menu');
 
       const wrapper = document.createElement('div');
       wrapper.classList.add('wrapper');
@@ -80,19 +51,12 @@ class HTMLContentGenerator {
           const navItem = document.createElement('a');
           navItem.href = item.href;
           navItem.classList.add('nav-item');
-          navItem.style.setProperty('--i', index + 1);
           navItem.textContent = item.text;
           wrapper.appendChild(navItem);
       });
 
-      // mobileMenu.appendChild(wrapper);
-
       headerInner.appendChild(logo);
-      headerInner.appendChild(inputCheckbox);
-      headerInner.appendChild(labelIcons);
       headerInner.appendChild(desktopMenu);
-      // headerInner.appendChild(navIcon);
-      // headerInner.appendChild(mobileMenu);
 
       header.appendChild(headerInner);
 
@@ -131,8 +95,6 @@ class Menu {
       this.loading = false;
     }
 
-    // Create an instance of the MobileMenu class
-    this.mobileMenuInstance = new MobileMenu();
   }
 }
 
