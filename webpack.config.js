@@ -12,7 +12,7 @@ module.exports = {
         basicdistortions: './src/templates/basicdistortions/index.js', 
         curlnoise: './src/templates/curlnoise/index.js', 
         sculpture: './src/templates/sculpture/index.js',
-        videointoparticles: './src/templates/video/index.js', 
+        videointoparticles: './src/templates/video/index.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
