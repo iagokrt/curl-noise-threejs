@@ -5,7 +5,8 @@ const entries = {
     basicdistortions: './src/templates/basicdistortions/index.js', 
     curlnoise: './src/templates/curlnoise/index.js', 
     sculpture: './src/templates/sculpture/index.js',
-    videointoparticles: './src/templates/video/index.js',
+    videointoparticles: './src/templates/video/index.js',    triangles: './src/templates/triangles/index.js',
+
 };
 
 module.exports = entries;

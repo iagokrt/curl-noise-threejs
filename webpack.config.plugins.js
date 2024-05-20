@@ -25,7 +25,12 @@ const plugins = [
         template: './src/templates/video/index.html', 
         chunks: ['videointoparticles'], 
         filename: 'videointoparticles.html',
+    }),    new HtmlWebpackPlugin({
+        template: './src/templates/triangles/index.html', 
+        chunks: ['triangles'], 
+        filename: 'triangles.html',
     }),
+
 ];
 
 module.exports = plugins;
