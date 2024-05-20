@@ -1,6 +1,8 @@
 import './styles/global.scss';
 // javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//mrdoob.github.io/stats.js/build/stats.min.js';document.head.appendChild(script);})()
 
+import { state, navItemsArray } from './state/state.js';
+
 class HTMLContentGenerator {
   static generateMainContent() {
       const main = document.createElement('main');
@@ -16,15 +18,7 @@ class HTMLContentGenerator {
       const desktopMenu = document.createElement('nav');
       desktopMenu.classList.add('navbar', 'desktop-menu');
 
-      const navItems = [
-          { text: 'WebGL', href: 'index.html' },
-          { text: '#1 Basic distortions', href: 'basicdistortions.html' },
-          { text: '#2 Curl noise + gsap', href: 'curlnoise.html' },
-          { text: '#3 Nefertiti Sculpture', href: 'sculpture.html' },
-          { text: '#4 Video into Particles', href: 'videointoparticles.html' },
-
-          { text: 'Contact', href: '#' }
-      ];
+      const navItems = navItemsArray;
 
       navItems.forEach((item, index) => {
           const navItem = document.createElement('a');
