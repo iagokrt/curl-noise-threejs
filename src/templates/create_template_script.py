@@ -1,6 +1,6 @@
 import os
 import sys
-
+import re
 class Script:
     def __init__(self, folder_name='teste'):
         self.folder_name = folder_name
@@ -15,13 +15,13 @@ class Script:
         file_path = os.path.join(self.new_folder_path, 'index.html')
         with open(file_path, 'w') as f:
             pass
-        print(f"Arquivo criado: {file_path}")
+        # print(f"Arquivo criado: 'index.html'")
     
     def create_index_js(self):
         file_path = os.path.join(self.new_folder_path, 'index.js')
         with open(file_path, 'w') as f:
             pass
-        print(f"Arquivo criado: {file_path}")
+        # print(f"Arquivo criado: 'index.js'")
 
     def fill_index_html(self, template_path):
         file_path = os.path.join(self.new_folder_path, 'index.html')
@@ -29,7 +29,7 @@ class Script:
             template_content = template_file.read()
         with open(file_path, 'w') as f:
             f.write(template_content)
-        print(f"Arquivo index.html preenchido com o template: {file_path}")
+        # print(f"Arquivo index.html preenchido com o template: {file_path}")
 
     def fill_index_js(self, template_path):
         file_path = os.path.join(self.new_folder_path, 'index.js')
@@ -37,10 +37,75 @@ class Script:
             template_content = template_file.read()
         with open(file_path, 'w') as f:
             f.write(template_content)
-        print(f"Arquivo index.js preenchido com o template: {file_path}")
+        # print(f"Arquivo index.js preenchido com o template: {file_path}")
     
-    def add_to_webpack_plugins(self):
-        config_path = os.path.join(self.current_dir, 'webpack.config.plugins.js')
+    def print_webpack_config(self):
+        webpack_config_path = os.path.join(self.current_dir, '../../webpack.config.entries.js')
+        print(webpack_config_path)
+        if os.path.exists(webpack_config_path):
+            with open(webpack_config_path, 'r') as webpack_file:
+                content = webpack_file.read()
+            print(f"Conteúdo do arquivo webpack.config.entries.js:\n{content}")
+        else:
+            print(f"Arquivo webpack.config.entries.js não encontrado: {webpack_config_path}")
+    
+    def add_entry_to_webpack_config(self, entry_name):
+        webpack_config_path = os.path.join(self.current_dir, '../../webpack.config.entries.js')
+        if os.path.exists(webpack_config_path):
+            with open(webpack_config_path, 'r') as webpack_file:
+                content = webpack_file.read()
+            
+            # Create the new entry string
+            new_entry = f"    {entry_name}: './src/templates/{entry_name}/index.js',\n"
+            
+            # Find the position to insert the new entry (before the closing brace of entries object)
+            pattern = re.compile(r'(?<=entries = {)(.*?)(?=\n};)', re.DOTALL)
+            match = pattern.search(content)
+            
+            if match:
+                # Insert the new entry before the closing brace
+                updated_content = content[:match.end()] + new_entry + content[match.end():]
+                
+                with open(webpack_config_path, 'w') as webpack_file:
+                    webpack_file.write(updated_content)
+                
+                print(f"Entrada '{entry_name}' adicionada ao arquivo webpack.config.entries.js")
+            else:
+                print("Objeto 'entries' não encontrado no arquivo webpack.config.entries.js")
+        else:
+            print(f"Arquivo webpack.config.entries.js não encontrado: {webpack_config_path}")
+    
+    def add_plugin_to_webpack_config(self, entry_name):
+        webpack_config_path = os.path.join(self.current_dir, '../../webpack.config.plugins.js')
+        if os.path.exists(webpack_config_path):
+            with open(webpack_config_path, 'r') as webpack_file:
+                content = webpack_file.read()
+            
+            # Create the new plugin string
+            new_plugin = (
+                f"    new HtmlWebpackPlugin({{\n"
+                f"        template: './src/templates/{entry_name}/index.html', \n"
+                f"        chunks: ['{entry_name}'], \n"
+                f"        filename: '{entry_name}.html',\n"
+                f"    }}),\n"
+            )
+            
+            # Find the position to insert the new plugin (before the closing brace of plugins array)
+            pattern = re.compile(r'(?<=plugins = \[)(.*?)(?=\n\];)', re.DOTALL)
+            match = pattern.search(content)
+            
+            if match:
+                # Insert the new plugin before the closing brace
+                updated_content = content[:match.end()] + new_plugin + content[match.end():]
+                
+                with open(webpack_config_path, 'w') as webpack_file:
+                    webpack_file.write(updated_content)
+                
+                print(f"Plugin '{entry_name}' adicionado ao arquivo webpack.config.plugins.js")
+            else:
+                print("Array 'plugins' não encontrado no arquivo webpack.config.plugins.js")
+        else:
+            print(f"Arquivo webpack.config.plugins.js não encontrado: {webpack_config_path}")
     
 if __name__ == "__main__":
     folder_name = sys.argv[1] if len(sys.argv) > 1 else 'teste'
@@ -61,4 +126,9 @@ if __name__ == "__main__":
         project.fill_index_js(js_template_path)
     else:
         print(f"Template JS não encontrado: {js_template_path}")
-
+    
+    # project.print_webpack_config()
+    project.add_entry_to_webpack_config(folder_name)
+    project.add_plugin_to_webpack_config(folder_name)
+    
+    
