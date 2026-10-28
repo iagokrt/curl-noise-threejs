@@ -11,13 +11,6 @@ const LOREM_IPSUM =
 function installStyles() {
   const style = document.createElement('style');
   style.textContent = `
-    .placeholder-study header.header {
-      display: flex !important;
-      height: auto !important;
-      min-height: 0 !important;
-      position: relative !important;
-      z-index: 2;
-    }
     .placeholder-study #webgl {
       position: fixed;
       inset: 0;
@@ -26,11 +19,29 @@ function installStyles() {
     .placeholder-study .placeholder-copy {
       position: fixed;
       left: 2.5rem;
-      bottom: 2.25rem;
+      bottom: 5.4rem;
       z-index: 2;
       max-width: 28rem;
       color: rgba(255, 255, 255, 0.78);
       pointer-events: none;
+    }
+    .placeholder-study .placeholder-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding: 1rem 2.5rem 1.2rem;
+      background: linear-gradient(180deg, rgba(36,50,56,0), rgba(36,50,56,0.9));
+      pointer-events: none;
+    }
+    .placeholder-study .placeholder-footer a {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
     }
     .placeholder-study .placeholder-copy h1 {
       margin: 0 0 0.7rem;
@@ -45,8 +56,14 @@ function installStyles() {
       color: rgba(255, 255, 255, 0.58);
     }
     @media (max-width: 975px) {
-      .placeholder-study .logoTitle .logo {
-        font-size: clamp(1.7rem, 7vw, 3.2rem) !important;
+      .placeholder-study .placeholder-copy {
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 5.3rem;
+        max-width: none;
+      }
+      .placeholder-study .placeholder-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
       }
     }
   `;
@@ -97,17 +114,14 @@ export function createPlaceholderStudy({ title }) {
   document.body.classList.add('placeholder-study');
   document.body.innerHTML = `
     <main>
-      <header class="header">
-        <aside class="logoTitle">
-          <a class="logo" href="/index.html">${title}</a>
-          <a class="logoBackButton" href="/index.html">‹ back to homepage</a>
-        </aside>
-      </header>
       <div id="webgl"></div>
       <section class="placeholder-copy" aria-label="Experiment notes">
         <h1>${title}</h1>
         <p>${LOREM_IPSUM}</p>
       </section>
+      <footer class="placeholder-footer">
+        <a href="/index.html">‹ back to homepage</a>
+      </footer>
     </main>
   `;
   installStyles();

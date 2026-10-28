@@ -27,6 +27,57 @@ import MobileMenu from '../../component/MobileMenu';
 
 const WIDTH = 128;
 
+function installCurlNoiseStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.curl-noise-study {
+      background: #0e1111;
+    }
+    body.curl-noise-study #webgl {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    body.curl-noise-study .curl-noise-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding: 1rem 10% 1.2rem;
+      background: linear-gradient(180deg, rgba(14,17,17,0), rgba(14,17,17,0.9));
+      pointer-events: none;
+    }
+    body.curl-noise-study .curl-noise-footer a {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
+    }
+    @media (max-width: 975px) {
+      body.curl-noise-study .dg.main {
+        position: fixed !important;
+        top: 0.5rem !important;
+        bottom: auto !important;
+        right: 0 !important;
+        width: min(280px, calc(100vw - 0.75rem)) !important;
+        max-width: calc(100vw - 0.75rem);
+        z-index: 50 !important;
+        max-height: 45vh;
+        overflow-y: auto;
+      }
+      body.curl-noise-study .curl-noise-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 const CANVAS = {
   bgcolor: 0x0e1111,
   alpha: 1
@@ -43,33 +94,15 @@ class HTMLContentGenerator {
   static generateMainContent() {
       const main = document.createElement('main');
 
-      const header = document.createElement('header');
-      header.classList.add('header');
-
-      const logoHome = document.createElement('a');
-      logoHome.href = 'index.html';
-      logoHome.classList.add('logo');
-      logoHome.title = 'Navigate back to homepage';
-      logoHome.textContent = 'WebGL ';
-
-      const breadcrumbSeparator = document.createElement('span');
-      breadcrumbSeparator.classList.add('breadcrumb-separator');
-      breadcrumbSeparator.textContent = '›';
-
-      const logoItem = document.createElement('a');
-      logoItem.href = '#';
-      logoItem.classList.add('logo', 'logo-item');
-      logoItem.textContent = ' Curl Noise Distortions';
-
-      header.appendChild(logoHome);
-      header.appendChild(breadcrumbSeparator);
-      header.appendChild(logoItem);
-
       const webglDiv = document.createElement('div');
       webglDiv.id = 'webgl';
 
-      main.appendChild(header);
       main.appendChild(webglDiv);
+
+      const footer = document.createElement('footer');
+      footer.classList.add('curl-noise-footer');
+      footer.innerHTML = '<a href="/index.html">‹ back to homepage</a>';
+      main.appendChild(footer);
 
       return main;
   }
@@ -110,7 +143,6 @@ export default class Particled {
 
     window.onload = () => { 
       document.getElementById("loading").style.display = "none" 
-      document.querySelector("header").style.display = "block" 
       // document.querySelector("anime-container").style.display = "flex" 
       this.loading = false;
     }
@@ -211,7 +243,11 @@ export default class Particled {
 
     this.gui = new dat.GUI();
     
-    this.gui.close();
+    if (window.matchMedia('(max-width: 975px)').matches) {
+      this.gui.open();
+    } else {
+      this.gui.close();
+    }
 
     this.settings = {
       distortion: 0.0,
@@ -381,6 +417,8 @@ export default class Particled {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('curl-noise-study');
+  installCurlNoiseStyles();
   const mainContent = HTMLContentGenerator.generateMainContent();
   const loadingContent = HTMLContentGenerator.generateLoadingContent();
 

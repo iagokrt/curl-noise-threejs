@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GPUComputationRenderer } from 'three/examples/jsm/misc/GPUComputationRenderer.js';
 import * as dat from 'dat.gui';
+import Stats from 'stats.js';
 
 import '../../styles/global.scss';
 import daliImage from '../../../public/dali.jpg';
@@ -18,6 +19,118 @@ const STIPPLING_CAMERA = {
   maxDistance: 240,
   revealRadius: 5.15,
 };
+
+function installStipplingStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.stippling-study {
+      overflow: hidden;
+      background: #f1ead8;
+      color: #003c44;
+    }
+    body.stippling-study #webgl {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background: #f1ead8;
+    }
+    body.stippling-study .stippling-copy {
+      position: fixed;
+      left: 8%;
+      bottom: 5.4rem;
+      z-index: 2;
+      max-width: min(40rem, 52vw);
+      color: #003c44;
+      pointer-events: none;
+    }
+    body.stippling-study .stippling-copy h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(1.4rem, 2.8vw, 2.35rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+    body.stippling-study .stippling-copy p {
+      margin: 0;
+      color: rgba(0,60,68,0.72);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+    body.stippling-study .stippling-copy p + p {
+      margin-top: 0.35rem;
+      color: rgba(0,60,68,0.58);
+    }
+    body.stippling-study .stippling-copy a {
+      color: inherit;
+      pointer-events: auto;
+    }
+    body.stippling-study .stippling-start {
+      display: inline-block;
+      margin-top: 0.9rem;
+      border: 0;
+      padding: 0;
+      color: #007382;
+      background: transparent;
+      font: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      pointer-events: auto;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+    body.stippling-study .stippling-start.is-hidden {
+      display: none;
+    }
+    body.stippling-study .stippling-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding: 1rem 8% 1.2rem;
+      background: linear-gradient(180deg, rgba(241,234,216,0), rgba(241,234,216,0.9));
+      pointer-events: none;
+    }
+    body.stippling-study .stippling-footer a {
+      color: rgba(0,60,68,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
+    }
+    body.stippling-study .stippling-stats {
+      z-index: 60 !important;
+      top: 0.5rem !important;
+      bottom: auto !important;
+      left: 0.5rem !important;
+    }
+    @media (max-width: 975px) {
+      body.stippling-study .dg.main {
+        position: fixed !important;
+        top: 0.5rem !important;
+        bottom: auto !important;
+        right: 0 !important;
+        width: min(280px, calc(100vw - 0.75rem)) !important;
+        max-width: calc(100vw - 0.75rem);
+        z-index: 50 !important;
+        max-height: 45vh;
+        overflow-y: auto;
+      }
+      body.stippling-study .stippling-copy {
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 5.3rem;
+        max-width: none;
+      }
+      body.stippling-study .stippling-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
 
 class StipplingScene {
   constructor(options) {
@@ -40,12 +153,12 @@ class StipplingScene {
 
     this.renderer = new THREE.WebGLRenderer({
       antialias: !window.matchMedia('(max-width: 760px)').matches,
-      alpha: false,
+      alpha: true,
       powerPreference: 'high-performance',
     });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.renderer.setSize(this.width, this.height);
-    this.renderer.setClearColor(0xf1ead8, 1);
+    this.renderer.setClearColor(0xf1ead8, 0);
     this.container.appendChild(this.renderer.domElement);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -82,13 +195,17 @@ class StipplingScene {
     ];
     this.gui.add({ reset: () => this.reset() }, 'reset').name('Reset simulation');
 
+    if (window.matchMedia('(max-width: 975px)').matches) {
+      this.gui.open();
+    }
+
     this.createStipplingStudy();
     this.resize();
+    this.setupStats();
+    this.renderer.render(this.scene, this.camera);
     window.addEventListener('resize', () => this.resize());
     window.onload = () => {
       document.getElementById('loading').style.display = 'none';
-      const header = document.querySelector('.header');
-      if (header) header.style.display = 'flex';
     };
   }
 
@@ -96,6 +213,17 @@ class StipplingScene {
     if (this.isStarted) return;
     this.isStarted = true;
     this.render();
+  }
+
+  setupStats() {
+    this.stats = new Stats();
+    this.stats.showPanel(0);
+    this.stats.dom.classList.add('stippling-stats');
+    this.stats.dom.style.zIndex = '60';
+    this.stats.dom.style.top = '0.5rem';
+    this.stats.dom.style.bottom = 'auto';
+    this.stats.dom.style.left = '0.5rem';
+    document.body.appendChild(this.stats.dom);
   }
 
   createStipplingStudy() {
@@ -202,6 +330,7 @@ class StipplingScene {
   render() {
     if (!this.isStarted) return;
 
+    this.stats.begin();
     this.time += 0.016;
     const activeParticles = Math.min(this.particles, Math.ceil(this.frames * this.settings.revealSpeed));
     const revealRadius = Math.min(this.settings.revealRadius, 0.38 + this.frames * 0.018);
@@ -220,6 +349,7 @@ class StipplingScene {
       .getCurrentRenderTarget(this.positionVariable).texture;
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+    this.stats.end();
     this.frames += 1;
     requestAnimationFrame(() => this.render());
   }
@@ -228,60 +358,32 @@ class StipplingScene {
 class StipplingMenu {
   constructor(scene) {
     this.scene = scene;
-    this.startItem = document.querySelector('.stippling-menu .start');
-    this.aboutItem = document.querySelector('.stippling-menu .about');
-    this.creditItem = document.querySelector('.stippling-menu .credits');
-    this.creditLink = document.querySelector('.stippling-credit');
-
+    this.startItem = document.querySelector('.stippling-start');
     this.startItem.addEventListener('click', (event) => this.handleStartClick(event));
-    this.aboutItem.addEventListener('click', (event) => this.handleInfoClick(event, '.about .info'));
-    this.creditItem.addEventListener('click', (event) => this.handleInfoClick(event, '.credits .info'));
-    this.creditItem.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        this.handleInfoClick(event, '.credits .info');
-      }
-    });
-    this.creditLink.addEventListener('click', (event) => event.stopPropagation());
   }
 
   handleStartClick(event) {
     event.preventDefault();
     this.scene.start();
-    document.querySelector('.header').classList.add('collapsed');
-    this.startItem.classList.add('hidden');
-  }
-
-  handleInfoClick(event, selector) {
-    event.preventDefault();
-    document.querySelector(`.stippling-menu ${selector}`).classList.toggle('hidden');
+    this.startItem.classList.add('is-hidden');
   }
 }
 
 function createPage() {
   document.body.classList.add('stippling-study');
+  installStipplingStyles();
   document.body.innerHTML = `
     <main>
-      <header class="header">
-        <aside class="logoTitle">
-          <a class="logo" href="#">Stippling Technique - Dali</a>
-          <a class="logoBackButton" href="/index.html">‹ back to homepage</a>
-        </aside>
-        <nav class="navbar desktop-menu stippling-menu" aria-label="Experiment menu">
-          <a class="nav-item start" href="#start">⦿ Start</a>
-          <a class="nav-item about" href="#about">
-            ⦿ About this Experiment
-            <aside class="info hidden">A Salvador Dalí portrait reconstructed through GPU-driven stippling, where a grid of particles reveals the image and responds to interactive repulsion.</aside>
-          </a>
-          <div class="nav-item credits" role="button" tabindex="0">
-            ⦿ Credits
-            <aside class="info hidden">
-              Based on the Stippling <a class="stippling-credit" href="https://webgl-shaders.com/stippling-example.html" target="_blank" rel="noreferrer">Example</a> by WebGL Shaders.
-            </aside>
-          </div>
-        </nav>
-      </header>
       <div id="webgl"></div>
+      <section class="stippling-copy" aria-label="Experiment notes">
+        <h1>Stippling Technique - Dali</h1>
+        <p>A Salvador Dalí portrait reconstructed through GPU-driven stippling, where a grid of particles reveals the image and responds to interactive repulsion.</p>
+        <p>Based on the Stippling <a href="https://webgl-shaders.com/stippling-example.html" target="_blank" rel="noreferrer">Example</a> by WebGL Shaders.</p>
+        <button class="stippling-start" type="button">Start experiment</button>
+      </section>
+      <footer class="stippling-footer">
+        <a href="/index.html">‹ back to homepage</a>
+      </footer>
     </main>
     <aside id="loading"><h1>Loading...</h1></aside>
   `;

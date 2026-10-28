@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // settings and animations 
 import * as dat from 'dat.gui';
 import gsap from 'gsap';
+import Stats from 'stats.js';
 
 import '../../styles/global.scss';
 // javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = '//mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()
@@ -25,93 +26,120 @@ var DEFAULT_CAMERA = {
   far: 2000
 }
 
+function installSculptureStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.sculpture-study {
+      overflow: hidden;
+      background: #01080b;
+    }
+    body.sculpture-study #webgl {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    body.sculpture-study .sculpture-copy {
+      position: fixed;
+      left: 8%;
+      bottom: 5.4rem;
+      z-index: 2;
+      max-width: min(42rem, 52vw);
+      color: rgba(255,255,255,0.86);
+      pointer-events: none;
+    }
+    body.sculpture-study .sculpture-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding: 1rem 8% 1.2rem;
+      background: linear-gradient(180deg, rgba(1,8,11,0), rgba(1,8,11,0.88));
+      pointer-events: none;
+    }
+    body.sculpture-study .sculpture-footer a {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
+    }
+    body.sculpture-study .sculpture-copy h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(1.4rem, 2.8vw, 2.35rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+    body.sculpture-study .sculpture-copy p {
+      margin: 0;
+      color: rgba(255,255,255,0.58);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+    body.sculpture-study .sculpture-copy p + p {
+      margin-top: 0.35rem;
+      color: rgba(255,255,255,0.42);
+    }
+    body.sculpture-study .sculpture-stats {
+      z-index: 60 !important;
+      top: 0.5rem !important;
+      bottom: auto !important;
+      left: 0.5rem !important;
+    }
+    @media (max-width: 975px) {
+      body.sculpture-study .dg.main {
+        position: fixed !important;
+        top: 0.5rem !important;
+        bottom: auto !important;
+        right: 0 !important;
+        width: min(280px, calc(100vw - 0.75rem)) !important;
+        max-width: calc(100vw - 0.75rem);
+        z-index: 50 !important;
+        max-height: 45vh;
+        overflow-y: auto;
+      }
+      body.sculpture-study .sculpture-copy {
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 5.3rem;
+        max-width: none;
+      }
+      body.sculpture-study .sculpture-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
+      }
+      body.sculpture-study .sculpture-copy h1 {
+        font-size: clamp(1.35rem, 6vw, 2rem);
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 class HTMLContentGenerator {
   static generateMainContent() {
     const main = document.createElement('main');
 
-    const header = document.createElement('header');
-
-    const headerInner = document.createElement('header');
-    headerInner.classList.add('header');
-
-    // aside display
-    const headerAside = document.createElement('aside');
-    headerAside.classList.add('logoTitle');
-
-    const logo = document.createElement('a');
-    logo.href = '#';
-    logo.classList.add('logo');
-    logo.textContent = 'Nefertiti: Exploring Lights and Shadows';
-
-    const logoBackButton = document.createElement('a');
-    logoBackButton.href = '/index.html';
-    logoBackButton.classList.add('logoBackButton');
-    logoBackButton.textContent = '‹ back to homepage';
-
-    const desktopMenu = document.createElement('nav');
-    desktopMenu.classList.add('navbar', 'desktop-menu');
-
-    const navItemsDesktop = [
-      {
-        text: '⦿ Start',
-        href: '#start',
-        class: 'start',
-        info: 'start'
-      },
-      {
-        text: '⦿ About this Experiment',
-        href: '#about',
-        class: 'about',
-        info: 'Exploring light and shadow through a 3D model of Nefertiti, experimenting with directional lights, materials, and real-time rendering.'
-      },
-      {
-        text: '⦿ Credits',
-        href: '#credits',
-        class: 'credits',
-        info: "Inspired by Yuri Artiukh's creative coding tutorial. 3D model: BUST OF NEFERTITI, FOIA Results (Sketchfab)."
-      }
-    ];
-
-    navItemsDesktop.forEach(item => {
-      const navItem = document.createElement('a');
-      navItem.href = item.href;
-      navItem.classList.add('nav-item');
-
-      if (item.class) {
-        navItem.classList.add(item.class);
-      }
-
-      navItem.textContent = item.text;
-
-      if (item.class == 'about') {
-        const navItemDescription = document.createElement('aside');
-        navItemDescription.classList.add('info', 'hidden');
-        navItemDescription.textContent = item.info;
-        navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
-      }
-
-      if (item.class == 'credits') {
-        const navItemDescription = document.createElement('aside');
-        navItemDescription.classList.add('info', 'hidden');
-        navItemDescription.textContent = item.info;
-        navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
-      }
-
-      desktopMenu.appendChild(navItem);
-    });
-
-    headerAside.appendChild(logo);
-    headerAside.appendChild(logoBackButton);
-    headerInner.appendChild(headerAside);
-    headerInner.appendChild(desktopMenu);
-
-    header.appendChild(headerInner);
-
     const webglDiv = document.createElement('div');
     webglDiv.id = 'webgl';
 
-    main.appendChild(header);
     main.appendChild(webglDiv);
+
+    const copy = document.createElement('section');
+    copy.classList.add('sculpture-copy');
+    copy.innerHTML = `
+      <h1>Nefertiti: Exploring Lights and Shadows</h1>
+      <p>Exploring light and shadow through a 3D model of Nefertiti, experimenting with directional lights, materials, and real-time rendering.</p>
+      <p>Inspired by Yuri Artiukh's creative coding tutorial. 3D model: BUST OF NEFERTITI, FOIA Results (Sketchfab).</p>
+    `;
+    main.appendChild(copy);
+
+    const footer = document.createElement('footer');
+    footer.classList.add('sculpture-footer');
+    footer.innerHTML = '<a href="/index.html">‹ back to homepage</a>';
+    main.appendChild(footer);
 
     return main;
   }
@@ -127,47 +155,6 @@ class HTMLContentGenerator {
 
     return aside;
   }
-}
-class MenuHandler {
-  constructor() {
-    this.startItem = document.querySelector('.start'); // Seleciona o item com a classe 'start'
-    this.startItem.addEventListener('click', this.handleStartClick.bind(this)); // Adiciona um event listener para o clique no item 'start'
-
-    this.aboutItem = document.querySelector('.about');
-    this.aboutItem.addEventListener('click', this.handleAboutClick.bind(this));
-
-    this.creditItem = document.querySelector('.credits');
-    this.creditItem.addEventListener('click', this.handleCreditClick.bind(this));
-  }
-
-  handleStartClick(event) {
-    event.preventDefault(); // Evita o comportamento padrão do link
-
-    console.log("Item 'start' clicado!");
-
-    this.headerElement = document.querySelector('.header');
-    this.navbarElement = document.querySelector('.navbar');
-    this.navbarElement_start = document.querySelector('.navbar .start');
-
-    // Adiciona as classes de animações
-    this.headerElement.classList.add('collapsed');
-    // this.navbarElement.classList.add('hidden');
-    this.navbarElement_start.classList.add('hidden');
-
-  }
-
-  handleAboutClick(event) {
-    event.preventDefault();
-    this.aboutInfo = document.querySelector('.about .info');
-    this.aboutInfo.classList.toggle('hidden');
-  }
-
-  handleCreditClick(event) {
-    event.preventDefault();
-    this.creditInfo = document.querySelector('.credits .info');
-    this.creditInfo.classList.toggle('hidden');
-  }
-
 }
 
 export default class Particled {
@@ -197,7 +184,6 @@ export default class Particled {
 
     window.onload = () => {
       document.getElementById("loading").style.display = "none"
-      document.querySelector("header").style.display = "block"
       // document.querySelector("anime-container").style.display = "flex" 
       this.loading = false;
     }
@@ -222,6 +208,7 @@ export default class Particled {
     this.isPlaying = true;
 
     this.settings();
+    this.setupStats();
 
     this.addMesh();
     this.addLights();
@@ -393,36 +380,49 @@ export default class Particled {
     // Adicione outros controles para as propriedades da luz, dependendo da luz selecionada
     this.lightControls.open(); // Abra o painel de controle de luz
 
+    if (window.matchMedia('(max-width: 975px)').matches) {
+      this.gui.open();
+    }
+
+  }
+
+  setupStats() {
+    this.stats = new Stats();
+    this.stats.showPanel(0);
+    this.stats.dom.classList.add('sculpture-stats');
+    this.stats.dom.style.zIndex = '60';
+    this.stats.dom.style.top = '0.5rem';
+    this.stats.dom.style.bottom = 'auto';
+    this.stats.dom.style.left = '0.5rem';
+    document.body.appendChild(this.stats.dom);
+
   }
 
   render() {
     if (!this.isPlaying) return;
 
+    this.stats.begin();
     this.time += 0.05;
 
     // this.loadedModel.rotation += 0.02; // not working undefined
     requestAnimationFrame(this.render.bind(this));
     this.renderer.render(this.scene, this.camera);
+    this.stats.end();
 
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('sculpture-study');
+  installSculptureStyles();
   const mainContent = HTMLContentGenerator.generateMainContent();
   const loadingContent = HTMLContentGenerator.generateLoadingContent();
 
   document.body.appendChild(mainContent);
   document.body.appendChild(loadingContent);
 
-  new MenuHandler();
-
   new Particled({
     dom: document.getElementById('webgl'),
     menu: document.getElementById('menu')
   });
-
-  var tt = document.querySelector('.start');
-
-  // tt.click(); // disable open animation
 });
