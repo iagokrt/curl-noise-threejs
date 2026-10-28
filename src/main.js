@@ -13,18 +13,55 @@ class HTMLContentGenerator {
       const logo = document.createElement('a');
       logo.href = '#';
       logo.classList.add('logo');
-      logo.innerHTML = 'Iago.carneiro <small>| Visual Experiments</small>';
+      logo.innerHTML = 'Iago.carneiro <br class="home-mobile-break"/><small>| <br class="home-desktop-break"/> 3D Experiments</small>';
 
       const desktopMenu = document.createElement('nav');
       desktopMenu.classList.add('navbar', 'desktop-menu');
 
       const navItems = navItemsArray;
+      const experimentItems = navItems.filter((item) => item.text.match(/^#\d/));
+      const utilityItems = navItems.filter((item) => !item.text.match(/^#\d/));
 
-      navItems.forEach((item, index) => {
+      const experimentsGroup = document.createElement('div');
+      experimentsGroup.classList.add('experiments-group');
+
+      const experimentsToggle = document.createElement('button');
+      experimentsToggle.type = 'button';
+      experimentsToggle.classList.add('nav-item', 'experiments-toggle');
+      experimentsToggle.setAttribute('aria-expanded', 'false');
+      experimentsToggle.innerHTML = '<span class="experiments-chevron">›</span><span>Examples</span>';
+
+      const experimentsList = document.createElement('div');
+      experimentsList.classList.add('experiments-list');
+      experimentsList.setAttribute('aria-hidden', 'true');
+
+      experimentItems.forEach((item) => {
           const navItem = document.createElement('a');
           navItem.href = item.href;
           navItem.classList.add('nav-item');
           navItem.textContent = item.text;
+          experimentsList.appendChild(navItem);
+      });
+
+      experimentsToggle.addEventListener('click', () => {
+          const isOpen = experimentsGroup.classList.toggle('is-open');
+          experimentsToggle.setAttribute('aria-expanded', String(isOpen));
+          experimentsList.setAttribute('aria-hidden', String(!isOpen));
+      });
+
+      experimentsGroup.appendChild(experimentsToggle);
+      experimentsGroup.appendChild(experimentsList);
+      desktopMenu.appendChild(experimentsGroup);
+
+      utilityItems.forEach((item) => {
+          const navItem = document.createElement('a');
+          navItem.href = item.href;
+          navItem.classList.add('nav-item');
+          navItem.textContent = item.text;
+          if (item.external) {
+              navItem.target = '_blank';
+              navItem.rel = 'noreferrer';
+          }
           desktopMenu.appendChild(navItem);
       });
 
@@ -38,17 +75,6 @@ class HTMLContentGenerator {
       navIconLink.textContent = '☰';
 
       navIcon.appendChild(navIconLink);
-
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('wrapper');
-
-      navItems.forEach((item, index) => {
-          const navItem = document.createElement('a');
-          navItem.href = item.href;
-          navItem.classList.add('nav-item');
-          navItem.textContent = item.text;
-          wrapper.appendChild(navItem);
-      });
 
       headerInner.appendChild(logo);
       headerInner.appendChild(desktopMenu);
@@ -94,6 +120,7 @@ class Menu {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('home-page');
   const mainContent = HTMLContentGenerator.generateMainContent();
   const loadingContent = HTMLContentGenerator.generateLoadingContent();
 

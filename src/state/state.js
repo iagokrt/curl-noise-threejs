@@ -1,13 +1,16 @@
 import { DirectionalLight } from "three";
 
 const navItemsArray = [
-  { text: '#1 Basic distortions', href: 'basicdistortions.html' },
+  { text: '#1 RGB Shift', href: 'rgbshift.html' },
   { text: '#2 Curl noise + gsap', href: 'curlnoise.html' },
   { text: '#3 Nefertiti Sculpture', href: 'sculpture.html' },
   { text: '#4 Video into Particles', href: 'videointoparticles.html' },
   { text: '#5 Triangles', href: 'triangles.html' },
-  { text: 'WebGL', href: 'index.html' },
-  { text: 'Contact', href: '#' }
+  { text: '#6 Stippling Technique - Dali', href: 'stippling.html' },
+  { text: '#7 Using noise and Points', href: 'noiseandpoints.html' },
+  { text: '#8 FBO Particles decompilation', href: 'basicdistortions.html' },
+  { text: 'GitHub', href: 'https://github.com/iagokrt/', external: true },
+  { text: 'Contact (LinkedIn)', href: 'https://www.linkedin.com/in/iagobarreto/', external: true }
 ]
 
 const state = {

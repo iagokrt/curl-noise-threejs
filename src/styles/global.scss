@@ -559,6 +559,10 @@ header {
    font-weight: 700;
 }
 
+.home-mobile-break {
+   display: none;
+}
+
 .nav-item {
    position: relative;
    color: $primary-darker;
@@ -574,6 +578,54 @@ header {
 
 .nav-item:hover {
    color: skyblue;
+}
+
+.experiments-group {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+}
+
+.experiments-toggle {
+   display: flex;
+   align-items: center;
+   margin-left: 2.5rem;
+   padding: 0;
+   border: 0;
+   background: transparent;
+   color: $primary-darker;
+   cursor: url('../../public/ellipse.png'), pointer;
+   font: inherit;
+   font-size: 2.45rem;
+}
+
+.experiments-chevron {
+   display: inline-block;
+   margin-right: 0.35rem;
+   transition: transform 0.35s ease;
+}
+
+.experiments-group.is-open .experiments-chevron {
+   transform: rotate(90deg);
+}
+
+.experiments-list {
+   display: flex;
+   flex-direction: column;
+   max-height: 0;
+   overflow: hidden;
+   opacity: 0;
+   transition: max-height 0.45s ease, opacity 0.3s ease;
+}
+
+.experiments-group.is-open .experiments-list {
+   max-height: 32rem;
+   opacity: 1;
+}
+
+.experiments-list .nav-item {
+   font-size: 2.45rem;
+   margin-left: 5rem;
 }
 
 .icons {
@@ -623,5 +675,198 @@ aside.info {
    }
    .navbar {
       display: none;
+   }
+}
+
+// Shared mobile layout for the home page and recovered studies.
+@media (max-width: 975px) {
+   // The home screen is a composition of its own on small screens: center the
+   // title and navigation rather than inheriting the study-page sidebar layout.
+   body.home-page {
+      overflow: hidden;
+   }
+
+   body.home-page .header {
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      padding: 2rem 1.25rem;
+      align-items: center;
+      justify-content: center;
+      gap: 2.25rem;
+      overflow: hidden;
+      text-align: center;
+   }
+
+   body.home-page .header > .logo {
+      width: calc(100vw - 2rem) !important;
+      max-width: 100%;
+      text-align: center;
+      font-size: clamp(2rem, 8vw, 3.4rem);
+   }
+
+   body.home-page .home-mobile-break {
+      display: block;
+   }
+
+   body.home-page .home-desktop-break {
+      display: none;
+   }
+
+   body.home-page .header .navbar {
+      width: auto;
+      max-width: 100%;
+      align-items: center;
+      text-align: center;
+      overflow: visible;
+   }
+
+   body.home-page .experiments-group,
+   body.home-page .experiments-list {
+      align-items: center;
+   }
+
+   body.home-page .header .nav-item,
+   body.home-page .experiments-toggle,
+   body.home-page .experiments-list .nav-item {
+      margin-left: 0;
+      text-align: center;
+   }
+
+   .header {
+      width: 100%;
+      min-height: 0;
+      padding: 1.25rem 1rem;
+      gap: 1.25rem;
+      align-items: flex-start;
+      justify-content: flex-start;
+      overflow-y: auto;
+   }
+
+   .header > .logo,
+   .header > .logoTitle .logo {
+      max-width: 100%;
+      min-width: 0;
+      width: 100%;
+      font-size: clamp(2rem, 9vw, 3.2rem);
+      line-height: 1.05;
+      white-space: normal !important;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+   }
+
+   // Study pages use either a single breadcrumb link or two adjacent logo
+   // elements. Let both variants wrap instead of pushing the title off-screen
+   // on narrow devices.
+   .header .logo,
+   .header .logo-item {
+      display: block !important;
+      max-width: 100%;
+      min-width: 0;
+      width: calc(100vw - 1.5rem) !important;
+      white-space: normal !important;
+      overflow-wrap: anywhere !important;
+      word-break: break-word !important;
+   }
+
+   .header > .logoTitle {
+      width: 100%;
+      min-width: 0;
+   }
+
+   .sculpture-study .logo,
+   .stippling-study .logo {
+      font-size: clamp(1.3rem, 5.2vw, 2.5rem) !important;
+   }
+
+   .stippling-study .logo {
+      font-size: clamp(1.3rem, 5vw, 2.5rem) !important;
+   }
+
+   .header > .logo small {
+      font-size: 0.58em;
+   }
+
+   .header .navbar {
+      width: 100%;
+      max-height: 62vh;
+      overflow-y: auto;
+      align-items: flex-start;
+   }
+
+   .header .nav-item {
+      max-width: 100%;
+      margin-left: 0;
+      font-size: clamp(1.3rem, 6vw, 2.1rem);
+      line-height: 1.15;
+      white-space: normal;
+   }
+
+   .experiments-toggle {
+      margin-left: 0;
+      font-size: clamp(1.3rem, 6vw, 2.1rem);
+   }
+
+   .experiments-list {
+      width: 100%;
+      max-height: 0;
+   }
+
+   .experiments-group.is-open .experiments-list {
+      max-height: 62vh;
+      overflow-y: auto;
+   }
+
+   .experiments-list .nav-item {
+      margin-left: 1.5rem;
+      font-size: clamp(1.15rem, 5.2vw, 1.8rem);
+   }
+
+   .logoTitle {
+      max-width: 100%;
+   }
+
+   .logoTitle .logoBackButton {
+      font-size: 0.82rem;
+   }
+
+   aside.info {
+      max-width: calc(100vw - 2rem);
+      font-size: 0.95rem;
+      line-height: 1.35;
+   }
+
+   .dg.main {
+      position: fixed !important;
+      width: min(245px, calc(100vw - 0.5rem)) !important;
+      max-width: calc(100vw - 0.5rem);
+      top: auto !important;
+      bottom: 0 !important;
+   }
+
+   .dg.a {
+      max-width: calc(100vw - 0.5rem);
+   }
+}
+
+@media (max-width: 520px) {
+   .header {
+      padding: 0.9rem 0.75rem;
+   }
+
+   .header .navbar {
+      max-height: 56vh;
+   }
+
+   .experiments-group.is-open .experiments-list {
+      max-height: 56vh;
+   }
+
+   .experiments-list .nav-item {
+      margin-left: 1rem;
+   }
+
+   .dg.main {
+      right: 0 !important;
    }
 }

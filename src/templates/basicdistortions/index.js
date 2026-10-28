@@ -56,7 +56,7 @@ class HTMLContentGenerator {
       const logoItem = document.createElement('a');
       logoItem.href = '#';
       logoItem.classList.add('logo', 'logo-item');
-      logoItem.textContent = ' Basic Fragment Distortion';
+      logoItem.textContent = ' FBO Particles';
 
       header.appendChild(logoHome);
       header.appendChild(breadcrumbSeparator);
