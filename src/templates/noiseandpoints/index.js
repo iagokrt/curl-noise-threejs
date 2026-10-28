@@ -20,6 +20,65 @@ const NOISE_CAMERA = {
   target: [0.5, 0.5, 0],
 };
 
+function installNoisePointsStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    body.noise-points-study {
+      overflow: hidden;
+      background: #243238;
+    }
+    body.noise-points-study #webgl {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+    body.noise-points-study .noise-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 1rem 1.5rem 1.2rem;
+      background: linear-gradient(180deg, rgba(36,50,56,0), rgba(36,50,56,0.9));
+      pointer-events: none;
+    }
+    body.noise-points-study .noise-footer a {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
+    }
+    body.noise-points-study .noise-stats {
+      z-index: 60 !important;
+      top: 0.5rem !important;
+      bottom: auto !important;
+      left: 0.5rem !important;
+    }
+    @media (max-width: 975px) {
+      body.noise-points-study .dg.main {
+        position: fixed !important;
+        top: 0.5rem !important;
+        bottom: auto !important;
+        right: 0 !important;
+        width: min(280px, calc(100vw - 0.75rem)) !important;
+        max-width: calc(100vw - 0.75rem);
+        z-index: 50 !important;
+        max-height: 45vh;
+        overflow-y: auto;
+      }
+      body.noise-points-study .noise-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 class NoisePointsScene {
   constructor(options) {
     this.scene = new THREE.Scene();
@@ -125,7 +184,11 @@ class NoisePointsScene {
   setupStats() {
     this.stats = new Stats();
     this.stats.showPanel(0);
-    this.stats.dom.style.zIndex = '30';
+    this.stats.dom.classList.add('noise-stats');
+    this.stats.dom.style.zIndex = '60';
+    this.stats.dom.style.top = '0.5rem';
+    this.stats.dom.style.bottom = 'auto';
+    this.stats.dom.style.left = '0.5rem';
     document.body.appendChild(this.stats.dom);
   }
 
@@ -260,14 +323,14 @@ class NoisePointsScene {
 }
 
 function createPage() {
+  document.body.classList.add('noise-points-study');
+  installNoisePointsStyles();
   document.body.innerHTML = `
     <main>
-      <header class="header">
-        <a class="logo" href="/index.html" title="Back to homepage">WebGL</a>
-        <span class="breadcrumb-separator">›</span>
-        <span class="logo logo-item">Using noise and Points</span>
-      </header>
       <div id="webgl"></div>
+      <footer class="noise-footer">
+        <a href="/index.html">‹ back to homepage</a>
+      </footer>
     </main>
     <button id="noise-help-toggle" class="noise-help-toggle" type="button" aria-expanded="false" aria-controls="noise-help">
       ? How it works

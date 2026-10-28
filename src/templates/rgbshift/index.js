@@ -39,17 +39,41 @@ function installStyles() {
       touch-action: none;
       user-select: none;
     }
+    .rgb-shift-study #webgl canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
     .rgb-shift-study #webgl.is-dragging {
       cursor: grabbing;
     }
     .rgb-shift-study .rgb-copy {
       position: fixed;
       left: 10%;
-      bottom: 2.5rem;
+      bottom: 5.4rem;
       z-index: 2;
       max-width: 25rem;
       color: rgba(255,255,255,0.72);
       pointer-events: none;
+    }
+    .rgb-shift-study .rgb-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      padding: 1rem 10% 1.2rem;
+      background: linear-gradient(180deg, rgba(17,16,15,0), rgba(17,16,15,0.86));
+      pointer-events: none;
+    }
+    .rgb-shift-study .rgb-footer a {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.82rem;
+      line-height: 1.2;
+      pointer-events: auto;
     }
     .rgb-shift-study .rgb-copy h1 {
       margin: 0 0 0.55rem;
@@ -66,6 +90,16 @@ function installStyles() {
     .rgb-shift-study .scroll-spacer {
       height: 100vh;
       pointer-events: none;
+    }
+    @media (max-width: 975px) {
+      .rgb-shift-study .rgb-copy {
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 5.3rem;
+      }
+      .rgb-shift-study .rgb-footer {
+        padding: 0.95rem 1.5rem 1.15rem;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -190,6 +224,10 @@ class RGBShiftScene {
     this.lastPointer.y = event.clientY;
 
     this.dragVelocityTarget = THREE.MathUtils.clamp((dx / window.innerWidth) * 5 + (dy / window.innerHeight) * 2, -1, 1);
+    // Touch screens do not emit wheel events. Feed the vertical gesture into
+    // the same virtual scroll accumulator used by the desktop wheel input.
+    this.scrollWorldTarget -= (dy / Math.max(window.innerHeight, 1)) * 2.2;
+    this.scrollVelocityTarget = THREE.MathUtils.clamp((-dy / Math.max(window.innerHeight, 1)) * 5, -1, 1);
     this.dragOffsetTarget.x = THREE.MathUtils.clamp(this.dragOffsetTarget.x + (dx / window.innerWidth) * 0.7, -0.3, 0.3);
     this.dragOffsetTarget.y = THREE.MathUtils.clamp(this.dragOffsetTarget.y - (dy / window.innerHeight) * 0.7, -0.3, 0.3);
   }
@@ -272,17 +310,14 @@ function createPage() {
   document.body.classList.add('rgb-shift-study');
   document.body.innerHTML = `
     <main>
-      <header class="header">
-        <aside class="logoTitle">
-          <a class="logo" href="/index.html">WebGL <span class="logo-item">› RGB Shift</span></a>
-          <a class="logoBackButton" href="/index.html">‹ back to homepage</a>
-        </aside>
-      </header>
       <div id="webgl"></div>
       <section class="rgb-copy">
         <h1>RGB Shift</h1>
         <p>Scroll or click and drag to push the plane and separate its color channels.</p>
       </section>
+      <footer class="rgb-footer">
+        <a href="/index.html">‹ back to homepage</a>
+      </footer>
       <div class="scroll-spacer" aria-hidden="true"></div>
     </main>
   `;

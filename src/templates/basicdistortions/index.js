@@ -58,9 +58,15 @@ class HTMLContentGenerator {
       logoItem.classList.add('logo', 'logo-item');
       logoItem.textContent = ' FBO Particles';
 
+      const logoBackButton = document.createElement('a');
+      logoBackButton.href = 'index.html';
+      logoBackButton.classList.add('logoBackButton');
+      logoBackButton.textContent = '‹ back to homepage';
+
       header.appendChild(logoHome);
       header.appendChild(breadcrumbSeparator);
       header.appendChild(logoItem);
+      header.appendChild(logoBackButton);
 
       const webglDiv = document.createElement('div');
       webglDiv.id = 'webgl';
@@ -198,6 +204,7 @@ export default class Particled {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('breadcrumb-study');
   const mainContent = HTMLContentGenerator.generateMainContent();
   const loadingContent = HTMLContentGenerator.generateLoadingContent();
 
