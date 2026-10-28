@@ -7,6 +7,11 @@ const plugins = [
         chunks: ['index'], // Specify the chunks for this HTML file
     }),
     new HtmlWebpackPlugin({
+        template: './src/templates/rgbshift/index.html',
+        chunks: ['rgbshift'],
+        filename: 'rgbshift.html',
+    }),
+    new HtmlWebpackPlugin({
         template: './src/templates/curlnoise/index.html',
         chunks: ['curlnoise'],
         filename: 'curlnoise.html',
@@ -29,6 +34,16 @@ const plugins = [
         template: './src/templates/triangles/index.html', 
         chunks: ['triangles'], 
         filename: 'triangles.html',
+    }),
+    new HtmlWebpackPlugin({
+        template: './src/templates/stippling/index.html',
+        chunks: ['stippling'],
+        filename: 'stippling.html',
+    }),
+    new HtmlWebpackPlugin({
+        template: './src/templates/noiseandpoints/index.html',
+        chunks: ['noiseandpoints'],
+        filename: 'noiseandpoints.html',
     }),
 
 ];

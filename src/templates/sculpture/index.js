@@ -27,117 +27,132 @@ var DEFAULT_CAMERA = {
 
 class HTMLContentGenerator {
   static generateMainContent() {
-      const main = document.createElement('main');
+    const main = document.createElement('main');
 
-      const header = document.createElement('header');
+    const header = document.createElement('header');
 
-      const headerInner = document.createElement('header');
-      headerInner.classList.add('header');
+    const headerInner = document.createElement('header');
+    headerInner.classList.add('header');
 
-      // aside display
-      const headerAside = document.createElement('aside');
-      headerAside.classList.add('logoTitle');
+    // aside display
+    const headerAside = document.createElement('aside');
+    headerAside.classList.add('logoTitle');
 
-      const logo = document.createElement('a');
-      logo.href = '#';
-      logo.classList.add('logo');
-      logo.textContent = 'Nefertiti: Exploring Lights and Shadows';
+    const logo = document.createElement('a');
+    logo.href = '#';
+    logo.classList.add('logo');
+    logo.textContent = 'Nefertiti: Exploring Lights and Shadows';
 
-      const logoBackButton = document.createElement('a');
-      logoBackButton.href = '/index.html';
-      logoBackButton.classList.add('logoBackButton');
-      logoBackButton.textContent = '‹ back to homepage';
+    const logoBackButton = document.createElement('a');
+    logoBackButton.href = '/index.html';
+    logoBackButton.classList.add('logoBackButton');
+    logoBackButton.textContent = '‹ back to homepage';
 
-      const desktopMenu = document.createElement('nav');
-      desktopMenu.classList.add('navbar', 'desktop-menu');
+    const desktopMenu = document.createElement('nav');
+    desktopMenu.classList.add('navbar', 'desktop-menu');
 
-      const navItemsDesktop = [
-          { text: '⦿ Start', href: '#start', class: 'start', info: 'start' },
-          { text: '⦿ About this Experiment', href: '#about', class: 'about', info: 'lorem ipsum descriptior propt from thein yogurt' },
-          { text: '⦿ Credits', href: '#credits', class: 'credits', info: 'credits to yuri artiuk lesson on sculpture to particles, and also the model creator' }
-      ];
+    const navItemsDesktop = [
+      {
+        text: '⦿ Start',
+        href: '#start',
+        class: 'start',
+        info: 'start'
+      },
+      {
+        text: '⦿ About this Experiment',
+        href: '#about',
+        class: 'about',
+        info: 'Exploring light and shadow through a 3D model of Nefertiti, experimenting with directional lights, materials, and real-time rendering.'
+      },
+      {
+        text: '⦿ Credits',
+        href: '#credits',
+        class: 'credits',
+        info: "Inspired by Yuri Artiukh's creative coding tutorial. 3D model: BUST OF NEFERTITI, FOIA Results (Sketchfab)."
+      }
+    ];
 
-      navItemsDesktop.forEach(item => {
-        const navItem = document.createElement('a');
-        navItem.href = item.href;
-        navItem.classList.add('nav-item');
-    
-        if (item.class) {
-          navItem.classList.add(item.class);
-        }
+    navItemsDesktop.forEach(item => {
+      const navItem = document.createElement('a');
+      navItem.href = item.href;
+      navItem.classList.add('nav-item');
 
-        navItem.textContent = item.text;
+      if (item.class) {
+        navItem.classList.add(item.class);
+      }
 
-        if (item.class == 'about') {
-          const navItemDescription = document.createElement('aside');
-          navItemDescription.classList.add('info', 'hidden');
-          navItemDescription.textContent = item.info;
-          navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
-        } 
+      navItem.textContent = item.text;
 
-        if (item.class == 'credits') {
-          const navItemDescription = document.createElement('aside');
-          navItemDescription.classList.add('info', 'hidden');
-          navItemDescription.textContent = item.info;
-          navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
-        } 
-    
-        desktopMenu.appendChild(navItem);
-      });
-   
-      headerAside.appendChild(logo);
-      headerAside.appendChild(logoBackButton);
-      headerInner.appendChild(headerAside);
-      headerInner.appendChild(desktopMenu);
+      if (item.class == 'about') {
+        const navItemDescription = document.createElement('aside');
+        navItemDescription.classList.add('info', 'hidden');
+        navItemDescription.textContent = item.info;
+        navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
+      }
 
-      header.appendChild(headerInner);
+      if (item.class == 'credits') {
+        const navItemDescription = document.createElement('aside');
+        navItemDescription.classList.add('info', 'hidden');
+        navItemDescription.textContent = item.info;
+        navItem.appendChild(navItemDescription); // Adicionando o <aside> como filho do <a>
+      }
 
-      const webglDiv = document.createElement('div');
-      webglDiv.id = 'webgl';
+      desktopMenu.appendChild(navItem);
+    });
 
-      main.appendChild(header);
-      main.appendChild(webglDiv);
+    headerAside.appendChild(logo);
+    headerAside.appendChild(logoBackButton);
+    headerInner.appendChild(headerAside);
+    headerInner.appendChild(desktopMenu);
 
-      return main;
+    header.appendChild(headerInner);
+
+    const webglDiv = document.createElement('div');
+    webglDiv.id = 'webgl';
+
+    main.appendChild(header);
+    main.appendChild(webglDiv);
+
+    return main;
   }
 
   static generateLoadingContent() {
-      const aside = document.createElement('aside');
-      aside.id = 'loading';
+    const aside = document.createElement('aside');
+    aside.id = 'loading';
 
-      const h1 = document.createElement('h1');
-      h1.textContent = 'Loading...';
+    const h1 = document.createElement('h1');
+    h1.textContent = 'Loading...';
 
-      aside.appendChild(h1);
+    aside.appendChild(h1);
 
-      return aside;
+    return aside;
   }
 }
 class MenuHandler {
   constructor() {
-      this.startItem = document.querySelector('.start'); // Seleciona o item com a classe 'start'
-      this.startItem.addEventListener('click', this.handleStartClick.bind(this)); // Adiciona um event listener para o clique no item 'start'
+    this.startItem = document.querySelector('.start'); // Seleciona o item com a classe 'start'
+    this.startItem.addEventListener('click', this.handleStartClick.bind(this)); // Adiciona um event listener para o clique no item 'start'
 
-      this.aboutItem = document.querySelector('.about');
-      this.aboutItem.addEventListener('click', this.handleAboutClick.bind(this));
-      
-      this.creditItem = document.querySelector('.credits');
-      this.creditItem.addEventListener('click', this.handleCreditClick.bind(this));
+    this.aboutItem = document.querySelector('.about');
+    this.aboutItem.addEventListener('click', this.handleAboutClick.bind(this));
+
+    this.creditItem = document.querySelector('.credits');
+    this.creditItem.addEventListener('click', this.handleCreditClick.bind(this));
   }
 
   handleStartClick(event) {
-      event.preventDefault(); // Evita o comportamento padrão do link
+    event.preventDefault(); // Evita o comportamento padrão do link
 
-      console.log("Item 'start' clicado!");
+    console.log("Item 'start' clicado!");
 
-      this.headerElement = document.querySelector('.header');
-      this.navbarElement = document.querySelector('.navbar');
-      this.navbarElement_start = document.querySelector('.navbar .start');
+    this.headerElement = document.querySelector('.header');
+    this.navbarElement = document.querySelector('.navbar');
+    this.navbarElement_start = document.querySelector('.navbar .start');
 
-      // Adiciona as classes de animações
-      this.headerElement.classList.add('collapsed');
-      // this.navbarElement.classList.add('hidden');
-      this.navbarElement_start.classList.add('hidden');
+    // Adiciona as classes de animações
+    this.headerElement.classList.add('collapsed');
+    // this.navbarElement.classList.add('hidden');
+    this.navbarElement_start.classList.add('hidden');
 
   }
 
@@ -239,18 +254,18 @@ export default class Particled {
       purple: 0x800080,
       cyan: 0x00ffff,
       black: 0x000000,
-      
+
     };
 
     // Verifica se a luz está habilitada
     if (this.enableLight && this.enableLight.enable) {
       // Adiciona a luz selecionada com base na opção escolhida
       // console.log('this.selectedLight',this.selectedLight)
-      console.log('this.selectedLight.light:',this.selectedLight.light)
+      console.log('this.selectedLight.light:', this.selectedLight.light)
 
       const lightObjects = new AddLightObjects(this.scene);
 
-      switch(this.selectedLight.light) {
+      switch (this.selectedLight.light) {
         case 'directionalLight 1':
           console.log('directionalLight')
           this.directionalLight = lightObjects.createDirectionalLight(colors.blue, 0.62, this.directionalLightPosition);
@@ -268,7 +283,7 @@ export default class Particled {
     }
 
     if (this.debug) {
-      var count=0;
+      var count = 0;
       this.scene.traverse((object) => {
         if (object instanceof THREE.Light) {
           console.log(object);
@@ -277,7 +292,7 @@ export default class Particled {
       });
       console.log('Lights found:', count)
     }
-    
+
   }
 
   // Método para remover todas as luzes da cena
@@ -314,10 +329,10 @@ export default class Particled {
   addMesh() {
     // Criar uma promessa para aguardar o carregamento do modelo
     const modelLoadedPromise = new Promise((resolve, reject) => {
-        this.loadedModel = new ModelLoader(this.scene);
-        // this.loadedModel.onLoad(() => {
-        //     resolve();
-        // });
+      this.loadedModel = new ModelLoader(this.scene);
+      // this.loadedModel.onLoad(() => {
+      //     resolve();
+      // });
     });
 
     // Quando a promessa for resolvida (ou seja, o modelo estiver completamente carregado)
@@ -393,6 +408,7 @@ export default class Particled {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('sculpture-study');
   const mainContent = HTMLContentGenerator.generateMainContent();
   const loadingContent = HTMLContentGenerator.generateLoadingContent();
 
@@ -406,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menu: document.getElementById('menu')
   });
 
-  var tt= document.querySelector('.start');
+  var tt = document.querySelector('.start');
 
   // tt.click(); // disable open animation
 });
