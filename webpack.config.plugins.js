@@ -1,7 +1,18 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const plugins = [
+    // webpack-dev-server exposes `public/` directly, but production builds
+    // only publish `dist/`. Keep the video URLs identical in both environments.
+    new CopyPlugin({
+        patterns: [
+            {
+                from: path.resolve(__dirname, 'public', 'video'),
+                to: 'video',
+            },
+        ],
+    }),
     new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'public', 'index.html'), // template for index
         chunks: ['index'], // Specify the chunks for this HTML file
