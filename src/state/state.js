@@ -5,6 +5,7 @@ const navItemsArray = [
   { text: '#2 Curl noise + gsap', href: 'curlnoise.html' },
   { text: '#3 Nefertiti Sculpture', href: 'sculpture.html' },
   { text: '#4 Video into Particles', href: 'videointoparticles.html' },
+  { text: '#4.1 Video into Particles 2 (tests)', href: 'videointoparticles2.html' },
   { text: '#5 Triangles', href: 'triangles.html' },
   { text: '#6 Stippling Technique - Dali', href: 'stippling.html' },
   { text: '#7 Using noise and Points', href: 'noiseandpoints.html' },
